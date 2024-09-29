@@ -59,10 +59,14 @@ To run this application, you'll need Python and the following packages:
    ```
 
 2. Use the **Load Image** button to select an image file.
+![Select File Image](SelectFile.jpg)
 3. Program includes the following functionalities:
    - **Switch Image**: Toggle between the original and grayscale images.
+   ![Greyscale Panel Image](ExportGreyscale.png)
    - **Switch Histogram**: Toggle between the original and adjusted histograms.
+   ![Equalized Panel Image](RosesEqualized.png)
    - **Save as ...**: Save the current displayed image.
+   ![Save As](SaveAs.png)
 
 ## Acknowledgments
 
