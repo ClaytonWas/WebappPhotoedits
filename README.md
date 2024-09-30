@@ -1,5 +1,5 @@
 # WebappPhotoedits
-Photo manipulation software using javascript to mimic applications like photoshop and photopea.
+Photo manipulation software using JavaScript inspired by applications like Photoshop and Photopea.
 Provding filter and image transformations.
 
 
