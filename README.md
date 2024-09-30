@@ -31,25 +31,22 @@ To run this application, you'll need Python and the following packages:
 
 2. Install the required packages:
    ```bash
-    pip install -r requirements.txt
+    pip install -r ./Prototype/requirements.txt
    ```
 
 3. (Optional) Make sure Tkinter is installed:
-   - **Windows**: Typically included with Python.
    - **Ubuntu**:
-     ```bash
-        sudo apt-get install python3-tk
-     ```
-    - **AlmaLinux**:
-        ```bash
-            sudo dnf install python3 python3-pip python3-tkinter
-        ```
-        ```bash
-            pip3 install -r requirements.txt
-        ```
+      ```bash
+      sudo apt-get install python3-tk
+      ```
+   - **AlmaLinux**:
+      ```bash
+      sudo dnf install python3 python3-pip python3-tkinter
+      ```
+
 ## Usage
 
-1. Run the application:
+1. Run the application in terminal (WebappPhotoedits/Prototype/):
    ```bash
    python sIE.py
    ```
@@ -59,14 +56,14 @@ To run this application, you'll need Python and the following packages:
    ```
 
 2. Use the **Load Image** button to select an image file.
-![Select File Image](SelectFile.jpg)
+![Select File Image](./Prototype/SelectFile.png)
 3. Program includes the following functionalities:
    - **Switch Image**: Toggle between the original and grayscale images.
-   ![Greyscale Panel Image](ExportGreyscale.png)
+   ![Greyscale Panel Image](./Prototype/ExportGreyscale.png)
    - **Switch Histogram**: Toggle between the original and adjusted histograms.
-   ![Equalized Panel Image](RosesEqualized.png)
-   - **Save as ...**: Save the current displayed image.
-   ![Save As](SaveAs.png)
+   ![Equalized Panel Image](./Prototype/RosesEqualized.png)
+   - **Save as ...**: Adjust the scale of and save the original image based on displayed modifications.
+   ![Save As](./Prototype/SaveAs.png)
 
 ## Acknowledgments
 
