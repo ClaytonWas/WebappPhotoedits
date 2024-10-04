@@ -2,8 +2,36 @@
 Photo manipulation software using JavaScript inspired by applications like Photoshop and Photopea.
 Provding filter and image transformations.
 
+# Current Stage
+A JavaScript Webapp that serves a photo manipulation user interface to a front-end user using Node.js and Express.js. This code also contains functionality to be used apart from a front end to allow programatic interactions by creating on the fly canvas elements for image instantiation.
 
-# Current Stage (Prototype)
+Currently in development.
+
+### Installation
+1. Install packages:
+   ```bash
+   npm i
+   ```
+2. Run local server:
+   ```bash
+   node server.js
+   ```
+
+### Images
+Image imports working with front end users local storage.
+![File Imports](./public/images/fileImportsOnUI.png)
+
+Front end visualization of image.
+![Image Import](./public/images/RosesOnImport.jpg)
+
+Taskbar interaction that manipulates the image mapped to the canvas.
+![Greyscaling](./public/images/RosesGreyscaleOnTaskbar.jpg)
+
+
+
+
+
+# Prototype
 A Python application that allows users to convert images to greyscale and equalizations.
 
 - Loads images in JPG, JPEG, PNG, BMP.
