@@ -1,0 +1,113 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter-Regular.woff2') format('woff2'),
+        url('/fonts/Inter-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/public/fonts/Inter-Italic.woff2') format('woff2'),
+        url('/public/fonts/Inter-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Taskbar */
+
+.taskbar {
+    display: flex;
+    background-color: #2d2d2d;
+    margin: 0;
+    padding: 0;
+}
+
+#icon {
+    position: relative;
+    padding: 10px;
+}
+
+.taskbarItem {
+    position: relative;
+    color: white;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    margin-left: 5px;
+}
+
+.taskbarItem:hover {
+    background-color: #3d3d3d;
+}
+
+.taskbarItem span {
+    padding-right: 100px;
+}
+
+.taskbarItem:hover .taskbarItemDropdown {
+    display: block;
+}
+
+.taskbarItemDropdown {
+    display: none;
+    position: absolute;
+    top: 38px;
+    background-color: #2d2d2d;
+    width: 100%;
+    list-style-type: none;
+}
+
+.taskbarItemDropdown li {
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.taskbarItemDropdown li:hover {
+    background-color: #3d3d3d;
+}
+
+.taskbarItemDropdownContainsSubmenu:hover .taskbarItemDropdownIsSubmenu {
+    display: block;
+}
+
+.taskbarItemDropdownIsSubmenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    background-color: #2d2d2d;
+}
+
+.taskbarItemDropdownIsSubmenu li {
+    color: white;
+    cursor: pointer;
+    list-style-type: none;
+}
+
+.taskbarItemDropdownIsSubmenu li:hover {
+    background-color: #3d3d3d;
+}
+
+/* Taskbar End */
+
+
+/* Canvas */
+
+/* Canvas End */

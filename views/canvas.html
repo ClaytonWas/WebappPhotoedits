@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script type="module" src="/scripts/taskbarHandler.js"></script>
+    <title>WebappPhotoedits</title>
+</head>
+<body>
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <img id="icon" src="/images/icon.png">
+        <div class="taskbarItem">
+            <span>File</span>
+            <ul class="taskbarItemDropdown">
+                <li id="openFile">Open</li>
+                <input id="uploadFile" type="file" accept="image/*" style="display: none;">
+                <li>Export as...</li>
+            </ul>
+        </div>
+
+        <div class="taskbarItem">
+            <span>Edit</span>
+            <ul class="taskbarItemDropdown">
+                <li>Undo</li>
+                <li>Redo</li>
+            </ul>
+        </div>
+
+        <div class="taskbarItem">
+            <span>Image</span>
+            <ul class="taskbarItemDropdown">
+                <li>Rescale</li>
+                <li>Crop</li>
+            </ul>
+        </div>
+
+        <div class="taskbarItem">
+            <span>Filter</span>
+            <ul class="taskbarItemDropdown">
+                <li>Gaussian Blur</li>
+                <li>Sharpen</li>
+                <li class="taskbarItemDropdownContainsSubmenu">Filter Gallery ▶
+                    <ul class="taskbarItemDropdownIsSubmenu">
+                        <li id="greyscale">Greyscale</li>
+                        <li>Equalization</li>
+                        <li>Negative</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /Taskbar -->
+
+    <!-- Canvas -->
+    <canvas id="imageCanvas"></canvas>
+    <!-- /Canvas -->
+
+</body>
+</html>
