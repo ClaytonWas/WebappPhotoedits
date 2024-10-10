@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('uploadFile').addEventListener('change', (response) => {
         const imageFile = response.target.files[0]        
         if(imageFile) {
-            document.getElementById("imageCanvasDiv").style.height = `${window.screen.height / 2}px`
-            document.getElementById("imageCanvasDiv").style.width = `${window.screen.width / 2}px`
-
             const image = new Image()
             image.src = URL.createObjectURL(imageFile)
 
@@ -30,13 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageProcessingHandler = new ImageProcessingHandler(image, imageCanvas)
                 imageProcessingHandler.loadImage()
 
-                URL.revokeObjectURL(imageFile);
-            };
-
-            
+                URL.revokeObjectURL(imageFile)
+            }
         }
     })
-
+    
     //Temporary code both in placement and in content to load greyscale images.
     document.getElementById('greyscale').addEventListener('click', () => {
         console.log('Greyscale function:', greyscale)

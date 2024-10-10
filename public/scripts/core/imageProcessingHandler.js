@@ -37,11 +37,4 @@ export class ImageProcessingHandler {
 
         this.modifiedImage = this.imageCanvas
     };
-
-    // Function to get image data. 
-    // This contains a imageData.data array which has each set of 4 entries mapped to R,G,B,A.
-    getImageData() {
-        const imageData = imageCanvasContext.getImageData(0, 0, this.imageCanvas.width, this.imageCanvas.height)
-        return imageData
-    };
 };
