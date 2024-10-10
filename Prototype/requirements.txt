@@ -1,5 +1,0 @@
-PySimpleGUI==4.60.0
-Pillow==9.4.0
-numpy==1.23.5
-opencv-python==4.6.0.66
-matplotlib==3.6.3

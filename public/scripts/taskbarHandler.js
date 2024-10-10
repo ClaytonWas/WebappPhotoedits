@@ -1,21 +1,5 @@
 import { ImageProcessingHandler } from './core/imageProcessingHandler.js';
-
-//Temporary code both in placement and in content to load greyscale images.
-const greyscale = (ctx, canvas, brightnessAdjustment = 0) => {
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-
-    for (let i = 0; i < data.length; i += 4) {
-        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-        data[i] = data[i + 1] = data[i + 2] = avg; // Set R, G, B to the average
-        // Apply brightness adjustment
-        data[i] += brightnessAdjustment;     // Red
-        data[i + 1] += brightnessAdjustment; // Green
-        data[i + 2] += brightnessAdjustment; // Blue
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-}
+import { greyscale } from './plugins/greyscale.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize handler to allow direct calls throughout the UI
@@ -28,9 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Passed on "Open" click
     // Recieves the FileList (in this case always a single image) and builds the canvas.
+    // Initalizes canvas.
+    // Scales divs within the imageViewingModule, this doesn't resize the canvas obeject directly. No loss of quality.
     document.getElementById('uploadFile').addEventListener('change', (response) => {
-        const imageFile = response.target.files[0]
+        const imageFile = response.target.files[0]        
         if(imageFile) {
+            document.getElementById("imageCanvasDiv").style.height = `${window.screen.height / 2}px`
+            document.getElementById("imageCanvasDiv").style.width = `${window.screen.width / 2}px`
+
             const image = new Image()
             image.src = URL.createObjectURL(imageFile)
 
@@ -42,17 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageProcessingHandler.loadImage()
 
                 URL.revokeObjectURL(imageFile);
-
-
-                //Temporary code both in placement and in content to load greyscale images.
-                document.getElementById('greyscale').addEventListener('click', () => {
-                    console.log('Greyscale function:', greyscale)
-                    imageProcessingHandler.addLayer(greyscale)
-                    imageProcessingHandler.applyLayers()
-                    imageProcessingHandler.loadImage()
-                })
-
             };
+
+            
         }
+    })
+
+    //Temporary code both in placement and in content to load greyscale images.
+    document.getElementById('greyscale').addEventListener('click', () => {
+        console.log('Greyscale function:', greyscale)
+        imageProcessingHandler.addLayer(greyscale)
+        imageProcessingHandler.applyLayers()
+        imageProcessingHandler.loadImage()
     })
 });
