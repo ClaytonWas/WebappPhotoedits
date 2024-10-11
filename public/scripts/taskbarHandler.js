@@ -1,42 +1,57 @@
-import { ImageProcessingHandler } from './core/imageProcessingHandler.js';
+import { ImageEditor } from './core/imageEditor.js';
 import { greyscale } from './plugins/greyscale.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize handler to allow direct calls throughout the UI
-    var imageProcessingHandler = null
+let imageEditor = null
 
-    // "Open" click, passes user to the hidden upload Input which recieves an image file.
+//
+
+async function uploadImage(imageFile) {
+    try {
+        const image = new Image()
+        image.src = URL.createObjectURL(imageFile)
+        URL.revokeObjectURL(imageFile)
+        image.onload = function () {
+            const imageCanvas = document.getElementById('imageCanvas')
+
+            var imageEditor = new ImageEditor(image, imageCanvas)
+            imageEditor.loadImage()
+            return imageEditor
+        }
+    } catch (error) {
+        console.error('Error importing image:', error)
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Opens file browser and loads the selected image to the canvas.
     document.getElementById('openFile').addEventListener('click', () => {
         document.getElementById('uploadFile').click()
     })
-
-    // Passed on "Open" click
-    // Recieves the FileList (in this case always a single image) and builds the canvas.
-    // Initalizes canvas.
-    // Scales divs within the imageViewingModule, this doesn't resize the canvas obeject directly. No loss of quality.
-    document.getElementById('uploadFile').addEventListener('change', (response) => {
-        const imageFile = response.target.files[0]        
-        if(imageFile) {
-            const image = new Image()
-            image.src = URL.createObjectURL(imageFile)
-
-            image.onload = function() {
-                const imageCanvas = document.getElementById('imageCanvas')
-                const context = imageCanvas.getContext('2d')
-
-                imageProcessingHandler = new ImageProcessingHandler(image, imageCanvas)
-                imageProcessingHandler.loadImage()
-
-                URL.revokeObjectURL(imageFile)
-            }
-        }
+    document.getElementById('uploadFile').addEventListener('change', (response) => {        
+        const imageFile = response.target.files[0]   
+        uploadImage(imageFile).then((editor) => {
+            imageEditor = editor
+            document.title = 'PhotoEdits | ' + imageFile.name   
+        }).catch((error) => {
+            console.error('Image editor could not be instantiated:', error)
+        })
     })
     
+
+
     //Temporary code both in placement and in content to load greyscale images.
     document.getElementById('greyscale').addEventListener('click', () => {
         console.log('Greyscale function:', greyscale)
-        imageProcessingHandler.addLayer(greyscale)
-        imageProcessingHandler.applyLayers()
-        imageProcessingHandler.loadImage()
+    })
+
+
+    document.getElementById('addLayer').addEventListener('click', () => {
+        let layersList = document.getElementById('layersList')
+        let layer = document.createElement('li')
+        layer.textContent = 'New Layer'
+
+        //imageEditor.addLayer()
+        console.log('Fix this add layer passing reference error issue.')
+        layersList.appendChild(layer)
     })
 });

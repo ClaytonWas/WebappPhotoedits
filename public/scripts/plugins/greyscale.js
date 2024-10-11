@@ -1,4 +1,9 @@
-export const greyscale = (ctx, canvas, brightnessAdjustment=0) => {
+export const greyscale = () => {
+
+}
+
+/**
+ * export const greyscale = (ctx, canvas, brightnessAdjustment=0) => {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
 
@@ -13,3 +18,4 @@ export const greyscale = (ctx, canvas, brightnessAdjustment=0) => {
 
     ctx.putImageData(imageData, 0, 0);
 }
+ */
