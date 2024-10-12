@@ -154,6 +154,7 @@ body {
     border: 2px solid #37ff00;
 }
 
+/* Layering Module */
 #layersSelector {
     position: relative;
 
@@ -162,5 +163,25 @@ body {
     
     border: 2px solid #00e1ff;
     background-color: #5d5d5d;
+}
+
+.layerDiv {
+    display: flex;
+    cursor: pointer;
+}
+.layerDiv:hover {
+    background-color: #4d4d4d;
+}
+.selectedLayerDiv {
+    background-color: #6d6d6d !important;
+}
+
+
+.layerDivName {
+    width: 80vw;
+}
+
+.layerDivToggleVisibility {
+    width: 20vw;
 }
 /* Image Viewing Module End */

@@ -1,5 +1,6 @@
 export class Layer {
-    constructor(imageData=null, name="New Layer", visible = true, opacity = 1) {
+    constructor(id, imageData=null, name="New Layer", visible = true, opacity = 1) {
+        this.id = id
         this.imageData = imageData
         this.name = name
         this.visible = visible
@@ -10,11 +11,14 @@ export class Layer {
 export class LayerManager {
     constructor() {
         this.layers = []
+        this.selectedLayerIndex = null // Is the selected layers[] index
     }
 
     addLayer() {
-        const layer = new Layer()
+        let layerId = this.layers.length
+        const layer = new Layer(layerId)
         this.layers.push(layer)
+        this.selectedLayerIndex = this.layers.length
     }
 
     // When I figure out how to write imageData as layers I need to implement this.

@@ -18,24 +18,4 @@ export class ImageEditor {
     loadImage() {
         this.imageCanvasContext.drawImage(this.modifiedImage, 0, 0)
     }
-
-    async addLayer() {
-        this.layerManager.addLayer()
-    }
-
-    filterLayer(index) {
-        this.layerManager.filterLayer(index)
-    }
-
-    deleteLayer(index) {
-        this.layerManager.deleteLayer(index)
-    }
-
-    toggleVisability(index) {
-        this.layerManager.toggleVisability(index)
-    }
-
-    setOpacity(index, opacity) {
-        this.layerManager.setOpacity(index, opacity)
-    }
 }
