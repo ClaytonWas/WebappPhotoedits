@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLayersList(imageEditor)
         let layersList = document.getElementById('layersList')
         layersList.lastElementChild.classList.add('selectedLayerDiv')
+        imageEditor.layerManager.selectedLayerIndex = Number(layersList.lastElementChild.id)
     })
 
     document.getElementById('deleteLayer').addEventListener('click', () => {

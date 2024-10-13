@@ -1,17 +1,18 @@
 export class Layer {
-    constructor(id, imageData=null, name="New Layer", visible = true, opacity = 1) {
+    constructor(id, imageData=null, name="New Layer", visible = true, opacity = 1, effect=null) {
         this.id = id
         this.imageData = imageData
         this.name = name
         this.visible = visible
         this.opacity = opacity
+        this.effect = effect
     }
 }
 
 export class LayerManager {
     constructor() {
         this.layers = []
-        this.selectedLayerIndex = null // Is the selected layers[] index
+        this.selectedLayerIndex = null // Is the selected index in this.layers[], null otherwise.
     }
 
     addLayer() {
@@ -22,8 +23,8 @@ export class LayerManager {
     }
 
     // When I figure out how to write imageData as layers I need to implement this.
-    filterLayer(index) {
-        this.layers[index].imageData = null
+    addLayerFilter(index, effect) {
+        this.layers[index].effect = effect
     }
 
     deleteLayer(index) {
