@@ -24,7 +24,9 @@ async function uploadImage(imageFile) {
     }
 }
 
-function renderLayers(imageEditor) {
+// Function that takes the current imageEditor and recreates layerDiv's dynamically based on updates to the imageEditor.layerManager.
+// This removes the selectedLayerIndex reference.
+function renderLayersList(imageEditor) {
     let layersList = document.getElementById('layersList')
     let index = 0
     layersList.innerHTML = ''
@@ -82,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imageEditor.layerManager.addLayer()
         
         // Then call renderLayers
-        renderLayers(imageEditor)
+        renderLayersList(imageEditor)
         let layersList = document.getElementById('layersList')
         layersList.lastElementChild.classList.add('selectedLayerDiv')
     })
@@ -95,8 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imageEditor.layerManager.selectedLayerIndex = null
         }
 
-        // Then call renderLayers
-        renderLayers(imageEditor)
+        renderLayersList(imageEditor)
     })
 
     document.getElementById('layersList').addEventListener('click', (event) => {
@@ -109,7 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    document.getElementById('layersList').addEventListener('dblclick', (event) => {
+
+    // Layers list interaction.
+    // Listens to double clicks on layerDiv's to create a rename input.
+    let layersList_HTMLElement = document.getElementById('layersList')
+    layersList_HTMLElement.addEventListener('dblclick', (event) => {
         var selectedLayerDivName = event.target.closest('.layerDivName')
         if(selectedLayerDivName) {
             const selectedLayerDiv = event.target.closest('.layerDiv')
@@ -129,19 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 layerNameInput.addEventListener('blur', () => {
                     const newLayerName = layerNameInput.value
                     imageEditor.layerManager.layers[selectedLayerIndex].name = newLayerName
-                    renderLayers(imageEditor)
+                    renderLayersList(imageEditor)
                     imageEditor.layerManager.selectedLayerIndex = selectedLayerIndex
                     const layerDivs = document.querySelectorAll('.layerDiv')
                     layerDivs[selectedLayerIndex].classList.add('selectedLayerDiv')
                 })
                 layerNameInput.addEventListener('keydown', (keypress) => {
                     if (keypress.key === 'Enter') {
-                        const newLayerName = layerNameInput.value
-                        imageEditor.layerManager.layers[selectedLayerIndex].name = newLayerName
-                        renderLayers(imageEditor)
-                        imageEditor.layerManager.selectedLayerIndex = selectedLayerIndex
-                        const layerDivs = document.querySelectorAll('.layerDiv')
-                        layerDivs[selectedLayerIndex].classList.add('selectedLayerDiv')
+                        layerNameInput.blur()
                     }
                 })
             }
