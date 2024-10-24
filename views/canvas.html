@@ -17,7 +17,8 @@
             <ul class="taskbarItemDropdown">
                 <li id="openFile">Open</li>
                 <input id="uploadFile" type="file" accept="image/*" style="display: none;">
-                <li>Export as...</li>
+                <li id="export">Quick Export</li>
+                <li id="exportFileAs">Export as...</li>
             </ul>
         </div>
 
@@ -72,6 +73,23 @@
         </div>
     </div>
     <!-- /Image Viewing Module -->
+
+    <!-- Image Data Module -->
+    <div class="imageDataModule">
+        <div class="imageDataModuleSection">
+            <p class="sectionLabel" id="titleName"></p>
+            <p class="sectionValue" id="imageName"></p>
+        </div>
+        <div class="imageDataModuleSection">
+            <p class="sectionLabel" id="titleDimensions"></p>
+            <p class="sectionValue" id="imageDimensions"></p>
+        </div>
+        <div class="imageDataModuleSection">
+            <p class="sectionLabel" id="titleExtension"></p>
+            <p class="sectionValue" id="imageExtension"></p>
+        </div>
+    </div>
+    <!-- /Image Data Module -->
 
 </body>
 </html>

@@ -194,3 +194,28 @@ body {
     width: 20vw;
 }
 /* Image Viewing Module End */
+
+
+
+/* Image Data Module */
+.imageDataModule{
+    height: 10vh;
+    width: 25vw;
+    border: 2px solid #656565;
+    background-color: #5d5d5d;
+}
+
+.imageDataModuleSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sectionLabel {
+    float: left;
+    font-weight: bold;
+}
+
+.sectionValue {
+    float: right;
+}
+/* Image Data Module End */

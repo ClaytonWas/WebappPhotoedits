@@ -3,6 +3,8 @@ import { greyscale } from './plugins/greyscale.js';
 
 let imageEditor = null
 
+// Function for initializing an image for front end use from a provided image file.
+// The primary purpose of this function is to initalize an ImageEditor object.
 async function uploadImage(imageFile) {
     try {
         const image = new Image()
@@ -11,11 +13,23 @@ async function uploadImage(imageFile) {
         image.onload = function () {
             const imageCanvas = document.getElementById('imageCanvas')
 
+            // Initializing Image Editor
             imageEditor = new ImageEditor(image, imageCanvas)
             imageEditor.loadImage()
 
+            // Initializing Front End Layers Manager List
             let layersList = document.getElementById('layersList')
             layersList.innerHTML = ''
+
+            // Initalizing Image Data Module
+            document.getElementById('titleName').textContent = 'Name:'
+            document.getElementById('imageName').textContent = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'))
+
+            document.getElementById('titleDimensions').textContent = 'Dimensions:'
+            document.getElementById('imageDimensions').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
+
+            document.getElementById('titleExtension').textContent = 'Extension:'
+            document.getElementById('imageExtension').textContent = `.${imageFile.type.slice(6)}`
 
             return imageEditor
         }
@@ -56,7 +70,7 @@ function renderLayersList(imageEditor) {
     imageEditor.layerManager.selectedLayerIndex = null
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
     // Opens file browser and loads the selected image to the canvas.
     document.getElementById('openFile').addEventListener('click', () => {
         document.getElementById('uploadFile').click()
@@ -66,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageFile = response.target.files[0]   
             uploadImage(imageFile).then((editor) => {
                 imageEditor = editor
-                document.title = 'PhotoEdits | ' + imageFile.name   
+                document.title = 'PhotoEdits | ' + imageFile.name
             }).catch((error) => {
                 console.error('Image editor could not be instantiated:', error)
             })
