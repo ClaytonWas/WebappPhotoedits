@@ -71,6 +71,11 @@ function renderLayersList(imageEditor) {
 }
 
 window.addEventListener('load', () => {
+
+    /*
+    * Taskbar Event Listeners
+    */
+
     // Opens file browser and loads the selected image to the canvas.
     document.getElementById('openFile').addEventListener('click', () => {
         document.getElementById('uploadFile').click()
@@ -93,40 +98,12 @@ window.addEventListener('load', () => {
     })
 
 
-    document.getElementById('addLayer').addEventListener('click', () => {
-        // Now I neeed to map the data structure of the layer to the list element of the same name.
-        imageEditor.layerManager.addLayer()
-        
-        // Then call renderLayers
-        renderLayersList(imageEditor)
-        let layersList = document.getElementById('layersList')
-        layersList.lastElementChild.classList.add('selectedLayerDiv')
-        imageEditor.layerManager.selectedLayerIndex = Number(layersList.lastElementChild.id)
-    })
-
-    document.getElementById('deleteLayer').addEventListener('click', () => {
-        // Check if there is a currently selected layer, remove layer and the layerManager index point if it exists.
-        const selectedLayerIndex = imageEditor.layerManager.selectedLayerIndex
-        if (selectedLayerIndex !== null) {
-            imageEditor.layerManager.deleteLayer(selectedLayerIndex)
-            imageEditor.layerManager.selectedLayerIndex = null
-        }
-
-        renderLayersList(imageEditor)
-    })
-
-    document.getElementById('layersList').addEventListener('click', (event) => {
-        const selectedLayerDiv = event.target.closest('.layerDiv')
-        if(selectedLayerDiv) {
-            const layerDivs = document.querySelectorAll('.layerDiv')
-            layerDivs.forEach(layer => layer.classList.remove('selectedLayerDiv'))
-            selectedLayerDiv.classList.add('selectedLayerDiv')
-            imageEditor.layerManager.selectedLayerIndex = Number(selectedLayerDiv.id)
-        }
-    })
 
 
-    // Layers list interaction.
+    /*
+    * Layers Selector Event Listeners
+    */
+   
     // Listens to double clicks on layerDiv's to create a rename input.
     let layersList_HTMLElement = document.getElementById('layersList')
     layersList_HTMLElement.addEventListener('dblclick', (event) => {
@@ -161,5 +138,37 @@ window.addEventListener('load', () => {
                 })
             }
         }
+    })
+
+    layersList_HTMLElement.addEventListener('click', (event) => {
+        const selectedLayerDiv = event.target.closest('.layerDiv')
+        if(selectedLayerDiv) {
+            const layerDivs = document.querySelectorAll('.layerDiv')
+            layerDivs.forEach(layer => layer.classList.remove('selectedLayerDiv'))
+            selectedLayerDiv.classList.add('selectedLayerDiv')
+            imageEditor.layerManager.selectedLayerIndex = Number(selectedLayerDiv.id)
+        }
+    })
+
+    document.getElementById('addLayer').addEventListener('click', () => {
+        // Now I neeed to map the data structure of the layer to the list element of the same name.
+        imageEditor.layerManager.addLayer()
+        
+        // Then call renderLayers
+        renderLayersList(imageEditor)
+        let layersList = document.getElementById('layersList')
+        layersList.lastElementChild.classList.add('selectedLayerDiv')
+        imageEditor.layerManager.selectedLayerIndex = Number(layersList.lastElementChild.id)
+    })
+
+    document.getElementById('deleteLayer').addEventListener('click', () => {
+        // Check if there is a currently selected layer, remove layer and the layerManager index point if it exists.
+        const selectedLayerIndex = imageEditor.layerManager.selectedLayerIndex
+        if (selectedLayerIndex !== null) {
+            imageEditor.layerManager.deleteLayer(selectedLayerIndex)
+            imageEditor.layerManager.selectedLayerIndex = null
+        }
+
+        renderLayersList(imageEditor)
     })
 });

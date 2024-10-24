@@ -18,4 +18,8 @@ export class ImageEditor {
     loadImage() {
         this.imageCanvasContext.drawImage(this.modifiedImage, 0, 0)
     }
+
+    exportImage() {
+        //return this.imageCanvas.toDataURL("image/png");
+    }
 }
