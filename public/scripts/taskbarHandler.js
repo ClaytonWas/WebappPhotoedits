@@ -13,9 +13,16 @@ async function uploadImage(imageFile) {
         image.onload = function () {
             const imageCanvas = document.getElementById('imageCanvas')
 
+            // Understanding Image Data
+            const fileName = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'))
+            const fileType = imageFile.type
+
             // Initializing Image Editor
-            imageEditor = new ImageEditor(image, imageCanvas)
+            imageEditor = new ImageEditor(image, fileName, fileType, imageCanvas)
             imageEditor.loadImage()
+
+            // Setting Title
+            document.title = `PhotoEdits | ${fileName}`
 
             // Initializing Front End Layers Manager List
             let layersList = document.getElementById('layersList')
@@ -23,13 +30,13 @@ async function uploadImage(imageFile) {
 
             // Initalizing Image Data Module
             document.getElementById('titleName').textContent = 'Name:'
-            document.getElementById('imageName').textContent = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'))
+            document.getElementById('imageName').textContent = imageEditor.Name
 
             document.getElementById('titleDimensions').textContent = 'Dimensions:'
             document.getElementById('imageDimensions').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
 
             document.getElementById('titleExtension').textContent = 'Extension:'
-            document.getElementById('imageExtension').textContent = `.${imageFile.type.slice(6)}`
+            document.getElementById('imageExtension').textContent = `.${imageEditor.FileExtension}`
 
             return imageEditor
         }
@@ -83,15 +90,15 @@ window.addEventListener('load', () => {
     document.getElementById('uploadFile').addEventListener('change', (response) => {        
         if(response.target.files[0]) {   
             const imageFile = response.target.files[0]   
-            uploadImage(imageFile).then((editor) => {
-                imageEditor = editor
-                document.title = 'PhotoEdits | ' + imageFile.name
-            }).catch((error) => {
+            uploadImage(imageFile).catch((error) => {
                 console.error('Image editor could not be instantiated:', error)
             })
         }
     })
     
+    document.getElementById('quickExport').addEventListener('click', () => {
+        imageEditor.exportImage()
+    })
     //Temporary code both in placement and in content to load greyscale images.
     document.getElementById('greyscale').addEventListener('click', () => {
         console.log('Greyscale function:', greyscale)
@@ -103,7 +110,7 @@ window.addEventListener('load', () => {
     /*
     * Layers Selector Event Listeners
     */
-   
+
     // Listens to double clicks on layerDiv's to create a rename input.
     let layersList_HTMLElement = document.getElementById('layersList')
     layersList_HTMLElement.addEventListener('dblclick', (event) => {

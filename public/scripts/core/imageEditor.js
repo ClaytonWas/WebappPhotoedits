@@ -1,11 +1,16 @@
 import { Layer, LayerManager } from './layers.js';
 
 export class ImageEditor {
-    constructor(image, canvas = null) {
+    constructor(image, imageName, imageFileType, canvas = null) {
+        // Imported Image Data
         this.image = image
+        this.Name = imageName // Source Image Name
+        this.FileType = imageFileType // Source Image File Type Represented As: `image/<extension>`
+        this.FileExtension = this.FileType.slice(6) // Slicing The 'image/' Off FileType
+
+        // Created Image Data
         this.modifiedImage = image
         this.layerManager = new LayerManager()
-
         this.imageCanvas = canvas || document.createElement('canvas')
         this.imageCanvasContext = this.imageCanvas.getContext('2d')
         this.imageCanvas.width = this.image.width
@@ -20,6 +25,9 @@ export class ImageEditor {
     }
 
     exportImage() {
-        //return this.imageCanvas.toDataURL("image/png");
+        let exportAnchor = document.createElement('a')
+        exportAnchor.href = this.imageCanvas.toDataURL(this.FileType)
+        exportAnchor.download = `${this.Name}_PhotoEditsExport.${this.FileExtension}`
+        exportAnchor.click()
     }
 }
