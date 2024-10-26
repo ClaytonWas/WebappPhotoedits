@@ -122,18 +122,25 @@ body {
 }
 /* Taskbar End */
 
+.wrapImageAndLayerModules {
+    display: flex;
+}
 
+/* Image Module */
+.imageModule {
+    height: 80vh;    
+    width: 80vw;
+}
 
 /* Image Viewing Module */
 .imageViewingModule {
     z-index: 1;
 
     display: flex;
-    justify-content: space-between;
     overflow: auto;
 
-    height: 80vh;    
-    width: 100vw;
+    height: 100%;    
+    width: 100%;
 
     border: 2px solid #383838;
     background-color: #4d4d4d;
@@ -157,20 +164,90 @@ body {
     border: 2px solid #656565;
 }
 
-/* Layering Module */
-#layersSelector {
-    position: relative;
+/* Image Viewing Module End */
 
-    min-width: 20%;
-    max-width: 20%;
-    
-    border: 2px solid #656565;
+
+/* Image Context Modules */
+.contextModules {
+    display: flex;
+
+    width: 80vw;
+    height: 15vh;
+
+
+    border: 2px solid #464646;
     background-color: #5d5d5d;
 }
 
+.contextModules > div {
+    border: 2px solid #595959;
+}
+
+
+/* Image Data Module */
+.imageDataModule {
+    width: 20vw;
+}
+
+.imageDataModuleSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sectionLabel {
+    float: left;
+    font-weight: bold;
+}
+
+.sectionValue {
+    float: right;
+}
+/* Image Data Module End */
+
+
+/* Image Context Modules End */
+
+
+/* Image Module End */
+
+
+
+/* Layers Module */
+.layersModule {
+    height: 95vh;
+    width: 20vw;
+
+    border: 2px solid #464646;
+    background-color: #5d5d5d;
+}
+
+.layersModule > div{
+    border: 2px solid #595959;
+}
+
+#currentLayerSelector {
+    height: 70%;
+}
+
+#layersSelector {
+    position: relative;
+    
+    height: 30%;
+}
+
+#layersList {
+    overflow: auto;
+    max-height: 95%;
+}
+
 #layersControls {
-    bottom: 0;
     position: absolute;
+    display: flex;
+    justify-content: space-between;
+    
+    height: 5%;
+
+    bottom: 0;
 }
 
 .layerDiv {
@@ -193,29 +270,4 @@ body {
 .layerDivToggleVisibility {
     width: 20vw;
 }
-/* Image Viewing Module End */
-
-
-
-/* Image Data Module */
-.imageDataModule{
-    height: 10vh;
-    width: 25vw;
-    border: 2px solid #656565;
-    background-color: #5d5d5d;
-}
-
-.imageDataModuleSection {
-    display: flex;
-    justify-content: space-between;
-}
-
-.sectionLabel {
-    float: left;
-    font-weight: bold;
-}
-
-.sectionValue {
-    float: right;
-}
-/* Image Data Module End */
+/* Layers Module End */

@@ -66,7 +66,6 @@ function renderLayersList(imageEditor) {
         layerDivToggleVisability.type = 'checkbox'
         layerDivToggleVisability.checked = layer.visible
 
-
         layerDiv.appendChild(layerDivName)
         layerDiv.appendChild(layerDivToggleVisability)
         layersList.appendChild(layerDiv)
@@ -108,8 +107,10 @@ window.addEventListener('load', () => {
 
 
     /*
-    * Layers Selector Event Listeners
+    * Layers Related Event Listeners
     */
+    // Visibilility Checkboxes
+
 
     // Listens to double clicks on layerDiv's to create a rename input.
     let layersList_HTMLElement = document.getElementById('layersList')
@@ -160,7 +161,7 @@ window.addEventListener('load', () => {
     document.getElementById('addLayer').addEventListener('click', () => {
         // Now I neeed to map the data structure of the layer to the list element of the same name.
         imageEditor.layerManager.addLayer()
-        
+
         // Then call renderLayers
         renderLayersList(imageEditor)
         let layersList = document.getElementById('layersList')
