@@ -28,24 +28,18 @@ Taskbar interaction that manipulates the image mapped to the canvas.
 ![Greyscaling](./public/images/RosesGreyscaleOnTaskbar.jpg)
 
 ### TODO:
-1. Get the layers system to appear dynamically in the layers selector. Writing this I realize I don't know exactly how layers work in lightroom, and I need to ask Jacob for help. The goal is to have filters be applied incrementally, but obviously different types of layers will effect this.
-Layers can be:
-
-FILTERS
+1. FILTERS
 exposure - altering light that hits the image
 contrast - difference of instensities between extreme
 colour balance - white balancing, colour correction
 colour grade - changing the brightness(luminance)/hue/saturation, for individual colours and/or entire image
 
-MASKS
+2. MASKS
 slectivley hide or show parts of a layer
 spot healing - remove unwanted parts of image, the brush automatically selects pixel neighbours to replace unwanted ones
 
-TRANSFORMS (NON LAYER MANIPULATIONS)
+3. TRANSFORMS (NON LAYER MANIPULATIONS)
 cropping 
 rotation
 
-
-2. Change the layers system to work as intended layers instead of overwriting the core image sequentially. This is harder done than said.
-3. Get the plugins system to load into the handler on instantiation.
-4. Separate the logic of the image proccessor into a low level manipluation class, and a higher level import class. This needs plugins to work, so implement those first. (This would be super cool.)
+4. Get the plugins system to load into the handler on instantiation.
