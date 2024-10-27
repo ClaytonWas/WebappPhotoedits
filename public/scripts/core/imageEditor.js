@@ -32,6 +32,7 @@ export class ImageEditor {
     }
 
     renderImage() {
+        this.modifiedImage = this.image
         this.canvasContext.drawImage(this.modifiedImage, 0, 0)
         const imageData = this.canvasContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
         
@@ -51,6 +52,7 @@ export class ImageEditor {
 
     deleteLayer(index) {
         this.layerManager.deleteLayer(index)
+        this.renderImage()
     }
 
     setSelectedIndex(index) {

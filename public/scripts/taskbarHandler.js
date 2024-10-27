@@ -107,12 +107,12 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('greyscale').addEventListener('click', () => {
-        imageEditor.layerManager.addLayerEffect(imageEditor.layerManager.selectedLayerIndex, greyscale)
+        imageEditor.layerManager.addLayerEffect(imageEditor.getSelectedIndex(), greyscale)
         imageEditor.renderImage()
     })
 
     document.getElementById('sepia').addEventListener('click', () => {
-        imageEditor.layerManager.addLayerEffect(imageEditor.layerManager.selectedLayerIndex, sepia)
+        imageEditor.layerManager.addLayerEffect(imageEditor.getSelectedIndex(), sepia)
         imageEditor.renderImage()
     })
 
