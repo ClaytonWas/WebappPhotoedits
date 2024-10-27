@@ -7,6 +7,11 @@ export class Layer {
         this.opacity = opacity
         this.effect = effect
     }
+
+    applyEffect(image) {
+        let data = image.data
+        this.effect(data)
+    }
 }
 
 export class LayerManager {
@@ -22,9 +27,17 @@ export class LayerManager {
         this.selectedLayerIndex = this.layers.length
     }
 
-    // When I figure out how to write imageData as layers I need to implement this.
-    addLayerFilter(index, effect) {
+    addLayerEffect(index, effect) {
         this.layers[index].effect = effect
+    }
+
+    applyLayerEffects(imageData) {
+        for (const layer of this.layers) {
+            if (layer.effect && layer.visible) {
+                layer.applyEffect(imageData)
+                console.log(`Applying effect of layer ${layer.id}: ${layer.name}`)
+            }
+        }
     }
 
     deleteLayer(index) {

@@ -100,7 +100,8 @@ window.addEventListener('load', () => {
     })
     //Temporary code both in placement and in content to load greyscale images.
     document.getElementById('greyscale').addEventListener('click', () => {
-        console.log('Greyscale function:', greyscale)
+        imageEditor.layerManager.addLayerEffect(imageEditor.layerManager.selectedLayerIndex, greyscale)
+        imageEditor.renderImage()
     })
 
 

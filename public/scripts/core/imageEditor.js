@@ -30,4 +30,14 @@ export class ImageEditor {
         exportAnchor.download = `${this.Name}_PhotoEditsExport.${this.FileExtension}`
         exportAnchor.click()
     }
+
+    renderImage() {
+        this.imageCanvasContext.drawImage(this.modifiedImage, 0, 0)
+        const imageData = this.imageCanvasContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
+        
+        this.layerManager.applyLayerEffects(imageData)
+
+        this.imageCanvasContext.putImageData(imageData, 0, 0)
+        console.log('Image Drawn')
+    }
 }
