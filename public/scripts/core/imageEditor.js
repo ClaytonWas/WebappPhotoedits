@@ -44,6 +44,7 @@ export class ImageEditor {
 
     toggleVisibility(index) {
         this.layerManager.toggleVisibility(index)
+        this.renderImage()
     }
 
     addLayer() {
