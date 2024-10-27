@@ -3,7 +3,9 @@ Photo manipulation software using JavaScript inspired by applications like Photo
 Provding filter and image transformations.
 
 # Current Stage
-A JavaScript Webapp that serves a photo manipulation user interface to a front-end user using Node.js and Express.js. This code also contains functionality to be used apart from a front end to allow programatic interactions by creating on the fly canvas elements for image instantiation.
+A webapp that serves a photo manipulation user interface to a front-end user using Node.js and Express.js. 
+
+This code is built on a programatic ImageEditor class instance, that handles front end interaction and performs image manipulations with context provided by an imagefile and HTML canvas. If no canvas is provided, it creates one internally. 
 
 Currently in development.
 
