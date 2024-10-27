@@ -1,6 +1,5 @@
 export class Layer {
-    constructor(id, imageData=null, name="New Layer", visible = true, opacity = 1, effect=null) {
-        this.id = id
+    constructor(imageData=null, name="New Layer", visible = true, opacity = 1, effect=null) {
         this.imageData = imageData
         this.name = name
         this.visible = visible
@@ -9,8 +8,7 @@ export class Layer {
     }
 
     applyEffect(image) {
-        let data = image.data
-        this.effect(data)
+        this.effect(image.data)
     }
 }
 
@@ -21,8 +19,7 @@ export class LayerManager {
     }
 
     addLayer() {
-        let layerId = this.layers.length
-        const layer = new Layer(layerId)
+        const layer = new Layer()
         this.layers.push(layer)
         this.selectedLayerIndex = this.layers.length
     }
@@ -35,7 +32,7 @@ export class LayerManager {
         for (const layer of this.layers) {
             if (layer.effect && layer.visible) {
                 layer.applyEffect(imageData)
-                console.log(`Applying effect of layer ${layer.id}: ${layer.name}`)
+                console.log(`Applying effect of layer: ${layer.name}`)
             }
         }
     }
@@ -44,7 +41,7 @@ export class LayerManager {
         this.layers.splice(index, 1)
     }
 
-    toggleVisability(index) {
+    toggleVisibility(index) {
         this.layers[index].visible = !this.layers[index].visible
     }
 
