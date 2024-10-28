@@ -43,18 +43,16 @@ export class ImageEditor {
         this.canvasContext.putImageData(imageData, 0, 0)
     }
 
-    bilinearInterpolation() {
+    bilinearInterpolation(newWidth, newHeight) {
 
     }
 
-    nearestNeighbourInterpolation(newHeight, newWidth, isConstrained, interpolationType) {
-        // Create a new canvas for the interpolated image
+    nearestNeighbourInterpolation(newHeight, newWidth) {
         const tempCanvas = document.createElement('canvas');
         const tempContext = tempCanvas.getContext('2d');
         tempCanvas.width = newWidth;
         tempCanvas.height = newHeight;
 
-        // Nearest Neighbor Interpolation Algorithm
         for (let y = 0; y < newHeight; y++) {
             for (let x = 0; x < newWidth; x++) {
                 // Calculate the position in the original image
@@ -70,12 +68,11 @@ export class ImageEditor {
             }
         }
 
-        // Update the modified image with the interpolated image data
+        // Update core image to the new height and width.
         let resizedImage = new Image()
         resizedImage.src = tempCanvas.toDataURL(this.FileType)
         this.image = resizedImage
 
-        // Optionally, draw the modified image to the original canvas
         this.canvas.height = newHeight
         this.canvas.width = newWidth
         this.canvasContext.drawImage(tempCanvas, 0, 0);
@@ -83,19 +80,18 @@ export class ImageEditor {
 
     // This changes the resolution of this.image. Can be dangerous as we rely on this.image being an accurate representation of the provided image.
     // The reason we change this.image has to do this this.renderImage()
-    resizeCanvas(newHeight, newWidth, isConstrained, interpolationType) {
-        console.log('Passing through: ', newHeight, newWidth, isConstrained, interpolationType)
+    resizeCanvas(newHeight, newWidth, maintainAspectRatio, interpolationType) {
+        console.log('Passing through: ', newHeight, newWidth, maintainAspectRatio, interpolationType)
 
-        if (isConstrained) {
 
-        }
 
         // Were going to need to resize both the regular image and the modified image.
         if (interpolationType === "Nearest Neighbour") {
             console.log("Nearest Neighbour Interpolation Chosen")
-            this.nearestNeighbourInterpolation(newHeight, newWidth, isConstrained, interpolationType)
+            this.nearestNeighbourInterpolation(newHeight, newWidth)
         } else if (interpolationType === "Bilinear") {
             console.log("Bilinear Interpolation Chosen")
+            this.bilinearInterpolation(newHeight, newWidth)
         }
 
         this.renderImage()

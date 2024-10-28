@@ -126,6 +126,16 @@ window.addEventListener('load', () => {
         closeResizeModule()
     })
 
+    let maintainAspectRatio = document.getElementById('constrainedCheckbox')
+    maintainAspectRatio.addEventListener('change', () => {
+        if (maintainAspectRatio.checked) {
+            let scaleFactor = imageEditor.canvas.width/document.getElementById('exportWidth').value
+            document.getElementById('exportHeight').value = Math.round(imageEditor.canvas.height / scaleFactor)
+        } else {
+
+        }
+    })
+
     document.getElementById('resizeSubmit').addEventListener('click', () => {
         // Gather the data from the form.
         let newHeight = document.getElementById('exportHeight').value
