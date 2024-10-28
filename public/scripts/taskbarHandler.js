@@ -12,6 +12,7 @@ async function uploadImage(imageFile) {
         const image = new Image()
         image.src = URL.createObjectURL(imageFile)
         URL.revokeObjectURL(imageFile)
+
         image.onload = function () {
             const imageCanvas = document.getElementById('imageCanvas')
 

@@ -41,7 +41,6 @@ export class ImageEditor {
         this.layerManager.applyLayerEffects(imageData)
 
         this.canvasContext.putImageData(imageData, 0, 0)
-        console.log('Image Drawn')
     }
 
     bilinearInterpolation() {
@@ -49,8 +48,6 @@ export class ImageEditor {
     }
 
     nearestNeighbourInterpolation(newHeight, newWidth, isConstrained, interpolationType) {
-        console.log(this.image)
-
         // Create a new canvas for the interpolated image
         const tempCanvas = document.createElement('canvas');
         const tempContext = tempCanvas.getContext('2d');
@@ -74,9 +71,9 @@ export class ImageEditor {
         }
 
         // Update the modified image with the interpolated image data
-        console.log('Logging image before new assignment', this.image)
-        this.image = tempCanvas.toDataURL(this.FileType);
-        console.log('Logging image after new assignment', this.image)
+        let resizedImage = new Image()
+        resizedImage.src = tempCanvas.toDataURL(this.FileType)
+        this.image = resizedImage
 
         // Optionally, draw the modified image to the original canvas
         this.canvas.height = newHeight
@@ -89,8 +86,12 @@ export class ImageEditor {
     resizeCanvas(newHeight, newWidth, isConstrained, interpolationType) {
         console.log('Passing through: ', newHeight, newWidth, isConstrained, interpolationType)
 
+        if (isConstrained) {
+
+        }
+
         // Were going to need to resize both the regular image and the modified image.
-        if(interpolationType === "Nearest Neighbour") {
+        if (interpolationType === "Nearest Neighbour") {
             console.log("Nearest Neighbour Interpolation Chosen")
             this.nearestNeighbourInterpolation(newHeight, newWidth, isConstrained, interpolationType)
         } else if (interpolationType === "Bilinear") {
