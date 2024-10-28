@@ -28,10 +28,10 @@ export class LayerManager {
         this.layers[index].effect = effect
     }
 
-    applyLayerEffects(imageData) {
+    applyLayerEffects(image) {
         for (const layer of this.layers) {
             if (layer.effect && layer.visible) {
-                layer.applyEffect(imageData)
+                layer.applyEffect(image)
                 console.log(`Applying effect of layer: ${layer.name}`)
             }
         }

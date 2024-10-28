@@ -43,6 +43,10 @@ body {
     padding: 10px;
 }
 
+.noTaskbarItemCollapse {
+    display: block !important;
+}
+
 .taskbarItem {
     z-index: 5;
 
@@ -118,6 +122,19 @@ body {
 }
 
 .taskbarItemDropdownIsSubmenu li:hover {
+    background-color: #3d3d3d;
+}
+
+.resizeModule {
+    z-index: 6;
+
+    position: fixed;
+
+    top: 40%;
+
+    height: 20vh;
+    width: 25vw;
+
     background-color: #3d3d3d;
 }
 /* Taskbar End */

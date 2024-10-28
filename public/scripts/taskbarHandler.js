@@ -82,6 +82,17 @@ function renderLayersList(imageEditor) {
     imageEditor.layerManager.selectedLayerIndex = null
 }
 
+function openResizeModule() {
+    document.getElementById('resizeModule').style.display = 'block'
+    document.querySelector('.taskbarItemDropdown').classList.add('noTaskbarItemCollapse')
+}
+
+function closeResizeModule() {
+    document.getElementById('resizeModule').style.display = 'none'
+    document.querySelector('.taskbarItemDropdown').classList.remove('noTaskbarItemCollapse')
+
+}
+
 window.addEventListener('load', () => {
 
     /*
@@ -103,7 +114,25 @@ window.addEventListener('load', () => {
     })
     
     document.getElementById('quickExport').addEventListener('click', () => {
-        imageEditor.exportImage()
+        imageEditor.quickExport()
+    })
+
+    document.getElementById('resize').addEventListener('click', () => {
+        openResizeModule()
+    })
+
+    document.getElementById('cancelResize').addEventListener('click', () => {
+        closeResizeModule()
+    })
+
+    document.getElementById('resizeSubmit').addEventListener('click', () => {
+        // Gather the data from the form.
+        let newHeight = document.getElementById('exportHeight').value
+        let newWidth = document.getElementById('exportWidth').value
+        let isConstrained = document.getElementById('constrainedCheckbox').checked
+        let interpolationType = document.getElementById('interpolationType').value
+
+        imageEditor.resizeCanvas(newHeight, newWidth, isConstrained, interpolationType)
     })
 
     document.getElementById('greyscale').addEventListener('click', () => {
