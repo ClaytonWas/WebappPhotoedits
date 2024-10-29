@@ -10,9 +10,9 @@ This code is built on a programatic ImageEditor class instance, that handles fro
 Currently in development.
 
 ### Installation
-1. Install packages:
+1. Install packages (with Node v20.15.1):
    ```bash
-   npm i
+   npm ci
    ```
 2. Run local server:
    ```bash
