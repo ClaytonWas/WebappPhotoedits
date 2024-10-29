@@ -5,7 +5,29 @@ import { sepia } from './plugins/sepia.js';
 
 let imageEditor = null
 
+function resetEditor() {
+    if (imageEditor) {
+        imageEditor = null;
+    }
+
+    // Reset UI elements related to the image data
+    document.getElementById('titleName').textContent = '';
+    document.getElementById('imageName').textContent = '';
+    document.getElementById('titleDimensions').textContent = '';
+    document.getElementById('imageDimensions').textContent = '';
+    document.getElementById('titleExtension').textContent = '';
+    document.getElementById('imageExtension').textContent = '';
+
+    // Clear layers list
+    document.getElementById('layersList').innerHTML = '';
+    document.title = 'PhotoEdits';
+
+    // Hide or reset any other UI modules
+    closeResizeModule();
+}
+
 async function uploadImage() {
+    resetEditor()
     const file = document.querySelector("input[type=file]").files[0];
     if (!file) return;
 
@@ -16,8 +38,6 @@ async function uploadImage() {
     const name = file.name.substring(0, file.name.lastIndexOf('.'));
     const type = file.type;
     const extension = type.slice(6);
-    //const width =;
-    //const height =;
     const canvas = document.getElementById('imageCanvas');
 
     // Writes image data (Base64) to image.src

@@ -32,7 +32,7 @@ export class ImageEditor {
         this.context = canvas.getContext("2d")
 
         // Created Image Data
-        this.modifiedImage = this.IMAGE
+        this.modifiedImage = this.image
         this.layerManager = new LayerManager()
         this.canvas.width = this.IMAGE.width
         this.canvas.height = this.IMAGE.height
@@ -86,6 +86,9 @@ export class ImageEditor {
             this.canvas.height = newHeight;
             this.renderImage()
         };
+
+        tempCanvas.remove()
+        tempContext.remove()
     }
 
     resizeCanvas(newHeight, newWidth, maintainAspectRatio, interpolationType) {

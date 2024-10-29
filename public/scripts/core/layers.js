@@ -1,6 +1,5 @@
 export class Layer {
-    constructor(imageData=null, name="New Layer", visible = true, opacity = 1, effect=null) {
-        this.imageData = imageData
+    constructor(name="New Layer", visible = true, opacity = 1, effect=null) {
         this.name = name
         this.visible = visible
         this.opacity = opacity
