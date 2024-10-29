@@ -5,27 +5,38 @@ import { sepia } from './plugins/sepia.js';
 
 let imageEditor = null
 
-// Function for initializing an image for front end use from a provided image file.
-// The primary purpose of this function is to initalize an ImageEditor object.
-async function uploadImage(imageFile) {
-    try {
-        const image = new Image()
-        image.src = URL.createObjectURL(imageFile)
-        URL.revokeObjectURL(imageFile)
+async function uploadImage() {
+    const file = document.querySelector("input[type=file]").files[0];
+    if (!file) return;
 
-        image.onload = function () {
-            const imageCanvas = document.getElementById('imageCanvas')
+    const reader = new FileReader();
+    const image = new Image();
 
-            // Understanding Image Data
-            const fileName = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'))
-            const fileType = imageFile.type
+    // File Metadata
+    const name = file.name.substring(0, file.name.lastIndexOf('.'));
+    const type = file.type;
+    const extension = type.slice(6);
+    //const width =;
+    //const height =;
+    const canvas = document.getElementById('imageCanvas');
 
-            // Initializing Image Editor
-            imageEditor = new ImageEditor(image, fileName, fileType, imageCanvas)
-            imageEditor.loadImage()
+    // Writes image data (Base64) to image.src
+    reader.onload = () => {
+        image.src = reader.result;
+    };
 
-            // Setting Title
-            document.title = `PhotoEdits | ${fileName}`
+    // Image loading in allows creation of ImageEditor
+    image.onload = () => {
+        imageEditor = new ImageEditor(image, name, type, extension, canvas);
+        imageEditor.loadImage()
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function initializeDisplay(imageEditor) {
+
+    document.title = `PhotoEdits | ${imageEditor.NAME}`
 
             // Initializing Front End Layers Manager List
             let layersList = document.getElementById('layersList')
@@ -40,12 +51,6 @@ async function uploadImage(imageFile) {
 
             document.getElementById('titleExtension').textContent = 'Extension:'
             document.getElementById('imageExtension').textContent = `.${imageEditor.FileExtension}`
-
-            return imageEditor
-        }
-    } catch (error) {
-        console.error('Error importing image:', error)
-    }
 }
 
 // Function that takes the current imageEditor and recreates layerDiv's dynamically based on updates to the imageEditor.layerManager.
@@ -102,16 +107,9 @@ window.addEventListener('load', () => {
 
     // Opens file browser and loads the selected image to the canvas.
     document.getElementById('openFile').addEventListener('click', () => {
-        document.getElementById('uploadFile').addEventListener('change', (response) => {        
-            if(response.target.files[0]) {   
-                const imageFile = response.target.files[0]   
-                uploadImage(imageFile).catch((error) => {
-                    console.error('Image editor could not be instantiated:', error)
-                })
-            }
-        })
-        
-        document.getElementById('uploadFile').click()
+        const fileInput = document.getElementById("uploadFile");
+        fileInput.addEventListener("change", uploadImage)
+        fileInput.click()
     })
     
     document.getElementById('quickExport').addEventListener('click', () => {

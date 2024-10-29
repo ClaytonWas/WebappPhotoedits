@@ -1,46 +1,62 @@
 import { Layer, LayerManager } from './layers.js';
 
 export class ImageEditor {
-    constructor(image, imageName, imageFileType, canvas = null) {
-        // Imported Image Data
-        this.image = image
-        this.Name = imageName // Source Image Name
-        this.FileType = imageFileType // Source Image File Type Represented As: `image/<extension>`
-        this.FileExtension = this.FileType.slice(6) // Slicing The 'image/' Off FileType
+    constructor(image, name, type, extension, canvas, context) {
+        this.IMAGE = image
+        /* this.IMAGE
+        This is the Image() element that stores the original image:
+          If anything bad happens to an image type, revert to this.
+          This is your guiding light in the abyss.
+          Do not overwrite this.
+          Maintain in memory always.
+          It's not inefficient, it's good redundancy.
+          Affirm!
+        */
+
+        this.NAME = name 
+        this.EXTENSION = extension                   
+        this.TYPE = type
+        /* this.XXXX
+        Variables that are passed in from the larger File type that maps onto the class.
+            Example Structure:
+                Name:           squirrel
+                Extension:      png
+                Type:           image/png 
+        */
+ 
+    
+        this.canvas = canvas
+        this.context = canvas.getContext("2d")
 
         // Created Image Data
-        this.modifiedImage = image
+        this.modifiedImage = this.IMAGE
         this.layerManager = new LayerManager()
-        this.canvas = canvas || document.createElement('canvas')
-        this.canvasContext = this.canvas.getContext('2d')
-        this.canvas.width = this.image.width
-        this.canvas.height = this.image.height
+        this.canvas.width = this.IMAGE.width
+        this.canvas.height = this.IMAGE.height
     }
 
     // Load image loads a canvas with the passed image.
     // TODO: It's important to do this to allow the user to crop the image at a later date. (I will need to change this.image calls to something more relative.)
     // TODO: This should also avoid the problem of reloading an image, and it should allow applyLayers() to start at the index of the current image without redrawing everything below it.
     loadImage() {
-        this.canvas.width = this.modifiedImage.width
-        this.canvas.height = this.modifiedImage.height
-        this.canvasContext.drawImage(this.modifiedImage, 0, 0)
+        this.context.drawImage(this.IMAGE, 0, 0)
     }
 
     quickExport() {
         let exportAnchor = document.createElement('a')
-        exportAnchor.href = this.canvas.toDataURL(this.FileType)
-        exportAnchor.download = `${this.Name}_PhotoEditsExport.${this.FileExtension}`
+        exportAnchor.href = this.canvas.toDataURL(this.TYPE)
+        exportAnchor.download = `${this.NAME}_PhotoEditsExport.${this.EXTENSION}`
         exportAnchor.click()
     }
 
     renderImage() {
-        this.modifiedImage = this.image
-        this.canvasContext.drawImage(this.modifiedImage, 0, 0)
-        const imageData = this.canvasContext.getImageData(0, 0, this.canvas.width, this.canvas.height)
+        this.modifiedImage = this.IMAGE
+        this.context.drawImage(this.modifiedImage, 0, 0)
+        const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height)
         
         this.layerManager.applyLayerEffects(imageData)
 
-        this.canvasContext.putImageData(imageData, 0, 0)
+        this.context.putImageData(imageData, 0, 0)
     }
 
     bilinearInterpolation(newWidth, newHeight) {
@@ -56,11 +72,11 @@ export class ImageEditor {
         for (let y = 0; y < newHeight; y++) {
             for (let x = 0; x < newWidth; x++) {
                 // Calculate the position in the original image
-                const originalX = Math.floor((x * this.image.width) / newWidth);
-                const originalY = Math.floor((y * this.image.height) / newHeight);
+                const originalX = Math.floor((x * this.IMAGE.width) / newWidth);
+                const originalY = Math.floor((y * this.IMAGE.height) / newHeight);
 
                 // Get the pixel color from the original image
-                const pixelData = this.canvasContext.getImageData(originalX, originalY, 1, 1).data;
+                const pixelData = this.context.getImageData(originalX, originalY, 1, 1).data;
 
                 // Set the pixel color in the new image
                 tempContext.fillStyle = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
@@ -70,12 +86,12 @@ export class ImageEditor {
 
         // Update core image to the new height and width.
         let resizedImage = new Image()
-        resizedImage.src = tempCanvas.toDataURL(this.FileType)
-        this.image = resizedImage
+        resizedImage.src = tempCanvas.toDataURL(this.TYPE)
+        this.IMAGE = resizedImage
 
         this.canvas.height = newHeight
         this.canvas.width = newWidth
-        this.canvasContext.drawImage(tempCanvas, 0, 0);
+        this.context.drawImage(tempCanvas, 0, 0);
     }
 
     // This changes the resolution of this.image. Can be dangerous as we rely on this.image being an accurate representation of the provided image.
