@@ -81,9 +81,9 @@ export class ImageEditor {
         resizedImage.src = tempCanvas.toDataURL(this.TYPE);
         resizedImage.onload = () => {
             this.image = resizedImage;
+            this.context.drawImage(resizedImage, 0, 0);
             this.canvas.width = newWidth;
             this.canvas.height = newHeight;
-            this.context.drawImage(resizedImage, 0, 0);
             this.renderImage()
         };
     }
