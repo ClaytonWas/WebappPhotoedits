@@ -26,31 +26,27 @@ async function uploadImage() {
     };
 
     // Image loading in allows creation of ImageEditor
+    // This is the place in code where you will initialze front end modules.
     image.onload = () => {
         imageEditor = new ImageEditor(image, name, type, extension, canvas);
         imageEditor.loadImage()
+        initializeOriginalImageDataModule()
     };
 
     reader.readAsDataURL(file);
 }
 
-function initializeDisplay(imageEditor) {
-
+function initializeOriginalImageDataModule() {
     document.title = `PhotoEdits | ${imageEditor.NAME}`
 
-            // Initializing Front End Layers Manager List
-            let layersList = document.getElementById('layersList')
-            layersList.innerHTML = ''
+    document.getElementById('titleName').textContent = 'Name:'
+    document.getElementById('imageName').textContent = imageEditor.NAME
 
-            // Initalizing Image Data Module
-            document.getElementById('titleName').textContent = 'Name:'
-            document.getElementById('imageName').textContent = imageEditor.Name
+    document.getElementById('titleDimensions').textContent = 'Dimensions:'
+    document.getElementById('imageDimensions').textContent = `${imageEditor.IMAGE.width} x ${imageEditor.IMAGE.height}px`
 
-            document.getElementById('titleDimensions').textContent = 'Dimensions:'
-            document.getElementById('imageDimensions').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
-
-            document.getElementById('titleExtension').textContent = 'Extension:'
-            document.getElementById('imageExtension').textContent = `.${imageEditor.FileExtension}`
+    document.getElementById('titleExtension').textContent = 'Extension:'
+    document.getElementById('imageExtension').textContent = `.${imageEditor.EXTENSION}`
 }
 
 // Function that takes the current imageEditor and recreates layerDiv's dynamically based on updates to the imageEditor.layerManager.
@@ -127,8 +123,8 @@ window.addEventListener('load', () => {
     let maintainAspectRatio = document.getElementById('constrainedCheckbox')
     maintainAspectRatio.addEventListener('change', () => {
         if (maintainAspectRatio.checked) {
-            let scaleFactor = imageEditor.canvas.width/document.getElementById('exportWidth').value
-            document.getElementById('exportHeight').value = Math.round(imageEditor.canvas.height / scaleFactor)
+            let scaleFactor = imageEditor.IMAGE.width/document.getElementById('exportWidth').value
+            document.getElementById('exportHeight').value = Math.round(imageEditor.IMAGE.height / scaleFactor)
         } else {
 
         }

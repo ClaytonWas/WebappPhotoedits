@@ -1,7 +1,7 @@
 import { Layer, LayerManager } from './layers.js';
 
 export class ImageEditor {
-    constructor(image, name, type, extension, canvas, context) {
+    constructor(image, name, type, extension, canvas) {
         this.IMAGE = image
         /* this.IMAGE
         This is the Image() element that stores the original image:
@@ -24,6 +24,9 @@ export class ImageEditor {
                 Type:           image/png 
         */
  
+
+
+        
         this.image = this.IMAGE                     // Used to resize images from from the original image dimensions while allow overwrites. 
         this.canvas = canvas
         this.context = canvas.getContext("2d")
@@ -35,9 +38,7 @@ export class ImageEditor {
         this.canvas.height = this.IMAGE.height
     }
 
-    // Load image loads a canvas with the passed image.
-    // TODO: It's important to do this to allow the user to crop the image at a later date. (I will need to change this.IMAGE calls to something more relative.)
-    // TODO: This should also avoid the problem of reloading an image, and it should allow applyLayers() to start at the index of the current image without redrawing everything below it.
+    // loadImage loads a canvas with the original image data.
     loadImage() {
         this.context.drawImage(this.IMAGE, 0, 0)
     }
@@ -60,7 +61,7 @@ export class ImageEditor {
     }
 
     bilinearInterpolation(newWidth, newHeight) {
-
+        // Come back to this tomorrow
     }
 
     nearestNeighbourInterpolation(newWidth, newHeight) {
@@ -71,7 +72,9 @@ export class ImageEditor {
         tempCanvas.height = newHeight;
 
         this.image = this.IMAGE
-        tempContext.drawImage(this.image, 0, 0, newWidth, newHeight); //I had no clue draw image had prebuilt interpolation, im just doing this instead wow
+
+        //Currently this is doing lininterp.
+        tempContext.drawImage(this.image, 0, 0, newWidth, newHeight); // Make a linear interpolation that works with this new data type.
 
         // Create new Image from the tempCanvas Context
         let resizedImage = new Image();
@@ -81,23 +84,19 @@ export class ImageEditor {
             this.canvas.width = newWidth;
             this.canvas.height = newHeight;
             this.context.drawImage(resizedImage, 0, 0);
+            this.renderImage()
         };
     }
 
     resizeCanvas(newHeight, newWidth, maintainAspectRatio, interpolationType) {
         console.log('Passing through: ', newHeight, newWidth, maintainAspectRatio, interpolationType)
-
-
-
-        // Were going to need to resize both the regular image and the modified image.
         if (interpolationType === "Nearest Neighbour") {
             console.log("Nearest Neighbour Interpolation Chosen")
-            this.nearestNeighbourInterpolation(newHeight, newWidth)
+            this.nearestNeighbourInterpolation(newWidth, newHeight)
         } else if (interpolationType === "Bilinear") {
             console.log("Bilinear Interpolation Chosen")
-            this.bilinearInterpolation(newHeight, newWidth)
+            this.bilinearInterpolation(newWidth, newHeight)
         }
-
         this.renderImage()
     }
 
