@@ -65,6 +65,11 @@ export class ImageEditor {
     }
 
     nearestNeighbourInterpolation(newWidth, newHeight) {
+
+    }
+
+    // Uses the browsers default setting for context.drawImage() calls
+    defaultInterpolation(newWidth, newHeight) {
         const tempCanvas = document.createElement('canvas');
         const tempContext = tempCanvas.getContext('2d');
 
@@ -88,12 +93,14 @@ export class ImageEditor {
         };
 
         tempCanvas.remove()
-        tempContext.remove()
     }
 
     resizeCanvas(newHeight, newWidth, maintainAspectRatio, interpolationType) {
         console.log('Passing through: ', newHeight, newWidth, maintainAspectRatio, interpolationType)
-        if (interpolationType === "Nearest Neighbour") {
+        if (interpolationType === "Default") {
+            console.log("Default Interpolation Chosen")
+            this.defaultInterpolation(newWidth, newHeight)
+        } else if (interpolationType === "Nearest Neighbour") {
             console.log("Nearest Neighbour Interpolation Chosen")
             this.nearestNeighbourInterpolation(newWidth, newHeight)
         } else if (interpolationType === "Bilinear") {
