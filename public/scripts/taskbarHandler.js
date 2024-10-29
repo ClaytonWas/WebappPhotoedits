@@ -5,47 +5,68 @@ import { sepia } from './plugins/sepia.js';
 
 let imageEditor = null
 
-// Function for initializing an image for front end use from a provided image file.
-// The primary purpose of this function is to initalize an ImageEditor object.
-async function uploadImage(imageFile) {
-    try {
-        const image = new Image()
-        image.src = URL.createObjectURL(imageFile)
-        URL.revokeObjectURL(imageFile)
-
-        image.onload = function () {
-            const imageCanvas = document.getElementById('imageCanvas')
-
-            // Understanding Image Data
-            const fileName = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'))
-            const fileType = imageFile.type
-
-            // Initializing Image Editor
-            imageEditor = new ImageEditor(image, fileName, fileType, imageCanvas)
-            imageEditor.loadImage()
-
-            // Setting Title
-            document.title = `PhotoEdits | ${fileName}`
-
-            // Initializing Front End Layers Manager List
-            let layersList = document.getElementById('layersList')
-            layersList.innerHTML = ''
-
-            // Initalizing Image Data Module
-            document.getElementById('titleName').textContent = 'Name:'
-            document.getElementById('imageName').textContent = imageEditor.Name
-
-            document.getElementById('titleDimensions').textContent = 'Dimensions:'
-            document.getElementById('imageDimensions').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
-
-            document.getElementById('titleExtension').textContent = 'Extension:'
-            document.getElementById('imageExtension').textContent = `.${imageEditor.FileExtension}`
-
-            return imageEditor
-        }
-    } catch (error) {
-        console.error('Error importing image:', error)
+function resetEditor() {
+    if (imageEditor) {
+        imageEditor = null;
     }
+
+    // Reset UI elements related to the image data
+    document.getElementById('titleName').textContent = '';
+    document.getElementById('imageName').textContent = '';
+    document.getElementById('titleDimensions').textContent = '';
+    document.getElementById('imageDimensions').textContent = '';
+    document.getElementById('titleExtension').textContent = '';
+    document.getElementById('imageExtension').textContent = '';
+
+    // Clear layers list
+    document.getElementById('layersList').innerHTML = '';
+    document.title = 'PhotoEdits';
+
+    // Hide or reset any other UI modules
+    closeResizeModule();
+}
+
+async function uploadImage() {
+    resetEditor()
+    const file = document.querySelector("input[type=file]").files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    const image = new Image();
+
+    // File Metadata
+    const name = file.name.substring(0, file.name.lastIndexOf('.'));
+    const type = file.type;
+    const extension = type.slice(6);
+    const canvas = document.getElementById('imageCanvas');
+
+    // Writes image data (Base64) to image.src
+    reader.onload = () => {
+        image.src = reader.result;
+    };
+
+    // Image loading in allows creation of ImageEditor
+    // This is the place in code where you will initialze front end modules.
+    image.onload = () => {
+        imageEditor = new ImageEditor(image, name, type, extension, canvas);
+        imageEditor.loadImage()
+        initializeOriginalImageDataModule()
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function initializeOriginalImageDataModule() {
+    document.title = `PhotoEdits | ${imageEditor.NAME}`
+
+    document.getElementById('titleName').textContent = 'Name:'
+    document.getElementById('imageName').textContent = imageEditor.NAME
+
+    document.getElementById('titleDimensions').textContent = 'Dimensions:'
+    document.getElementById('imageDimensions').textContent = `${imageEditor.IMAGE.width} x ${imageEditor.IMAGE.height}px`
+
+    document.getElementById('titleExtension').textContent = 'Extension:'
+    document.getElementById('imageExtension').textContent = `.${imageEditor.EXTENSION}`
 }
 
 // Function that takes the current imageEditor and recreates layerDiv's dynamically based on updates to the imageEditor.layerManager.
@@ -102,16 +123,9 @@ window.addEventListener('load', () => {
 
     // Opens file browser and loads the selected image to the canvas.
     document.getElementById('openFile').addEventListener('click', () => {
-        document.getElementById('uploadFile').addEventListener('change', (response) => {        
-            if(response.target.files[0]) {   
-                const imageFile = response.target.files[0]   
-                uploadImage(imageFile).catch((error) => {
-                    console.error('Image editor could not be instantiated:', error)
-                })
-            }
-        })
-        
-        document.getElementById('uploadFile').click()
+        const fileInput = document.getElementById("uploadFile");
+        fileInput.addEventListener("change", uploadImage)
+        fileInput.click()
     })
     
     document.getElementById('quickExport').addEventListener('click', () => {
@@ -129,8 +143,8 @@ window.addEventListener('load', () => {
     let maintainAspectRatio = document.getElementById('constrainedCheckbox')
     maintainAspectRatio.addEventListener('change', () => {
         if (maintainAspectRatio.checked) {
-            let scaleFactor = imageEditor.canvas.width/document.getElementById('exportWidth').value
-            document.getElementById('exportHeight').value = Math.round(imageEditor.canvas.height / scaleFactor)
+            let scaleFactor = imageEditor.IMAGE.width/document.getElementById('exportWidth').value
+            document.getElementById('exportHeight').value = Math.round(imageEditor.IMAGE.height / scaleFactor)
         } else {
 
         }
