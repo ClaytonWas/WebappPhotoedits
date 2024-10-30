@@ -143,8 +143,7 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('rotateImage').addEventListener('click', () => {
-        console.log('clicked!')
-        imageEditor.canvas.style.transform = 'rotate(90deg)'
+        //Cool!
     })
 
 
