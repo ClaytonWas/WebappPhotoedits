@@ -81,11 +81,9 @@ window.addEventListener('imageEditorReady', (event) => {
         /*
         *   This line adjusts the scale factor based on the deltaY property of the scroll event (event.deltaY). 
                 
-            If event.deltaY is negative (typically when scrolling up), 
-                scale is multiplied by 1.1, which increases it by 10%, effectively zooming in.
-            
-            If event.deltaY is positive (scrolling down), scale is multiplied by 0.9,
-                reducing it by 10%, effectively zooming out.
+            If event.deltaY is negative (typically when scrolling up), scale is multiplied by 1.1, 
+            which increases the amount of space the canvas takes up it by 10%.
+            If event.deltaY is positive (scrolling down), scale is multiplied by 0.9, reducing canvas by 10%.
         */
         
         // Limit zoom level to 0.1-10 times original size.

@@ -142,6 +142,14 @@ window.addEventListener('load', () => {
         imageEditor.resizeCanvas(newHeight, newWidth, isConstrained, interpolationType)
     })
 
+    document.getElementById('rotateImage').addEventListener('click', () => {
+        console.log('clicked!')
+        imageEditor.canvas.style.transform = 'rotate(90deg)'
+    })
+
+
+
+    // Filter applications
     document.getElementById('greyscale').addEventListener('click', () => {
         imageEditor.layerManager.addLayerEffect(imageEditor.getSelectedIndex(), greyscale)
         imageEditor.renderImage()
