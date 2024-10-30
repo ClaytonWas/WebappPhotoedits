@@ -136,7 +136,7 @@ body {
     padding-top: 1%;
     padding-bottom: 1%;
     padding-left: 3%;
-    
+
     font-weight: bold;
 }
 
@@ -251,6 +251,8 @@ body {
 
 /* Image Data Module */
 .imageDataModule {
+    color: white;
+
     width: 20vw;
 }
 
@@ -303,6 +305,8 @@ body {
 #layersList {
     overflow: auto;
     max-height: 95%;
+
+    color: white;
 }
 
 #layersControls {
