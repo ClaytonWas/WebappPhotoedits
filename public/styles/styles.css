@@ -129,12 +129,14 @@ body {
     
     justify-content: space-between;
 
-    padding: 1%;
-
     background-color: #2d2d2d;
 }
 
 .taskbarModuleTitle p {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 3%;
+    
     font-weight: bold;
 }
 
