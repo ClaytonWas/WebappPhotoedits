@@ -34,6 +34,7 @@ body {
     margin: 0;
     padding: 0;
 
+    color: white;
     background-color: #2d2d2d;
 }
 
@@ -57,8 +58,6 @@ body {
     padding-right: 20px;
     margin-left: 5px;
     cursor: pointer;
-
-    color: white;
 }
 
 .taskbarItem:hover {
@@ -125,16 +124,56 @@ body {
     background-color: #3d3d3d;
 }
 
+.taskbarModuleTitle {
+    display: flex;
+    
+    justify-content: space-between;
+
+    padding: 1%;
+
+    background-color: #2d2d2d;
+}
+
+.taskbarModuleTitle p {
+    font-weight: bold;
+}
+
+.taskbarModuleTitle button {
+    width: 20%;
+    right: 0%;
+}
+
+.taskbarModuleOneLine {
+    padding-top: 1%;
+    justify-content: space-between;
+    display: flex;
+    padding-inline: 5%;
+}
+
+.taskbarModuleOneLine input {
+    max-width: 30%;
+
+    color: white;
+    background-color:#2d2d2d;
+}
+
+.taskbarModuleSubmit {
+    margin: 2%;
+    float: right;
+}
+
 .resizeModule {
     z-index: 6;
+    display: none;
 
-    position: fixed;
+    position: absolute;
 
-    top: 40%;
+    top: 30%;
+    left: 15%;
 
-    height: 20vh;
-    width: 25vw;
+    width: 20vw;
 
+    color: white;
     background-color: #3d3d3d;
 }
 /* Taskbar End */

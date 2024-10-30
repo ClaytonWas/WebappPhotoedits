@@ -19,39 +19,6 @@
                 <input id="uploadFile" type="file" accept="image/*" style="display: none;">
                 <li id="quickExport">Quick Export</li>
                 <li id="resize">Resize</li>
-                <div class="resizeModule" id="resizeModule" style="display: none; cursor: default !important;">
-                    <div>
-                        <div style="display: flex; background-color: #2d2d2d;">
-                            <p>Resize</p>
-                            <button id="cancelResize" style="position: absolute; right: 0%;">x</button>
-                        </div>
-                        <div>
-                            <div style="display: flex;">
-                                <p>width</p>
-                                <input type="number" style="position: absolute; right: 15%;" type="text" placeholder="pixels" id="exportWidth">
-                            </div>
-                            <div style="display: flex;">
-                                <p>height</p>
-                                <input type="number" style="position: absolute; right: 15%;" type="text" placeholder="pixels" id="exportHeight">
-                            </div>
-                        </div>
-                        <div style="display: flex;">
-                            <p>Constrained </p>
-                            <input style="position: absolute; right: 15%;" type="checkbox" id="constrainedCheckbox">
-                        </div>
-                        <div style="display: flex;">
-                          <p>Interpolation </p>
-                          <select id="interpolationType" style="position: absolute; right: 15%;">
-                            <option value="Default">Default</option>
-                            <option value="Nearest Neighbour">Nearest Neighbour</option>
-                            <option value="Bilinear">Bilinear</option>
-                          </select>
-                        </div>
-                        <div>
-                            <button id="resizeSubmit" style="position: absolute; right: 15%;">Resize</button>
-                        </div>
-                      </div>
-                </div>
             </ul>
         </div>
 
@@ -89,9 +56,43 @@
     </div>
     <!-- /Taskbar -->
 
+    <!-- Taskbar Modules -->
+    <div class="resizeModule" id="resizeModule">
+        <div class="taskbarModuleTitle">
+                <p>Resize</p>
+                <button class="taskbarModuleClose" id="cancelResize">x</button>
+        </div>
+        <div class="taskbarModuleContent">
+                <div class="taskbarModuleOneLine">
+                    <p>Width</p>
+                    <input type="number" type="text" placeholder="pixels" id="resizeWidth">
+                </div>
+                <div class="taskbarModuleOneLine">
+                    <p>Height</p>
+                    <input type="number" type="text" placeholder="pixels" id="resizeHeight">
+                </div>
+                <div class="taskbarModuleOneLine">
+                    <p>Constrained</p>
+                    <input type="checkbox" id="constrainedCheckbox">
+                </div>
+                <div class="taskbarModuleOneLine" id="resizeScaleDIV" style="display: none;">
+                    <p>Scale</p>
+                    <input type="number" min="0" max="5" value="1" step=".1" id="resizeScale">
+                </div>
+                <div class="taskbarModuleOneLine">
+                  <p>Interpolation</p>
+                  <select id="interpolationType">
+                    <option value="Default">Default</option>
+                    <option value="Nearest Neighbour">Nearest Neighbour</option>
+                    <option value="Bilinear">Bilinear</option>
+                  </select>
+                </div>
+        </div>
+        <button class="taskbarModuleSubmit" id="resizeSubmit">Resize</button>
+    </div>
+
     <!-- Wrapper For Image And Layer Modules-->
     <div class="wrapImageAndLayerModules">
-
         <!-- Image Module -->
         <div class="imageModule">
             <!-- Image Viewing Module -->

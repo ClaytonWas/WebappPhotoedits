@@ -27,9 +27,10 @@ function resetEditor() {
 }
 
 async function uploadImage() {
-    resetEditor()
     const file = document.querySelector("input[type=file]").files[0];
     if (!file) return;
+
+    resetEditor();
 
     const reader = new FileReader();
     const image = new Image();
@@ -142,18 +143,46 @@ window.addEventListener('load', () => {
 
     let maintainAspectRatio = document.getElementById('constrainedCheckbox')
     maintainAspectRatio.addEventListener('change', () => {
-        if (maintainAspectRatio.checked) {
-            let scaleFactor = imageEditor.IMAGE.width/document.getElementById('exportWidth').value
-            document.getElementById('exportHeight').value = Math.round(imageEditor.IMAGE.height / scaleFactor)
-        } else {
+        let resizeHeight = document.getElementById('resizeHeight')
+        let resizeWidth = document.getElementById('resizeWidth')
+        let DIV = document.getElementById('resizeScaleDIV')
+        let scaleFactor = document.getElementById('resizeScale')
 
+        if (maintainAspectRatio.checked) {
+            DIV.style.display = 'flex'
+            document.getElementById('resizeScaleDiv')
+
+            resizeHeight.disabled = true
+            resizeWidth.disabled = true
+
+            resizeHeight.value = imageEditor.IMAGE.height
+            resizeWidth.value = imageEditor.IMAGE.width
+
+            scaleFactor.addEventListener('change', () => {
+                if (scaleFactor.value < 0.1) {
+                    scaleFactor.value = 0.1
+                } else if (scaleFactor.value > 10) {
+                    scaleFactor.value = 10
+                }
+
+                resizeHeight.value = Math.round(imageEditor.IMAGE.height * scaleFactor.value)
+                resizeWidth.value = Math.round(imageEditor.IMAGE.width * scaleFactor.value)
+                
+            })
+        } else {
+            DIV.style.display = 'none'
+
+            resizeHeight.disabled = false
+            resizeWidth.disabled = false
+
+            scaleFactor.value = '1'
         }
     })
 
     document.getElementById('resizeSubmit').addEventListener('click', () => {
         // Gather the data from the form.
-        let newHeight = document.getElementById('exportHeight').value
-        let newWidth = document.getElementById('exportWidth').value
+        let newHeight = document.getElementById('resizeHeight').value
+        let newWidth = document.getElementById('resizeWidth').value
         let isConstrained = document.getElementById('constrainedCheckbox').checked
         let interpolationType = document.getElementById('interpolationType').value
 
