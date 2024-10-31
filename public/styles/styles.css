@@ -281,6 +281,9 @@ body {
 
 /* Layers Module */
 .layersModule {
+    display: flex;
+    flex-direction: column;
+
     height: 95vh;
     width: 20vw;
 
@@ -293,19 +296,20 @@ body {
 }
 
 #currentLayerSelector {
-    height: 70%;
+    min-height: 70vh;
 }
 
 #layersSelector {
     position: relative;
     
-    height: 27%;
+    overflow-y: auto;
+
+    flex: 1;
     
     background-color: #545454;
 }
 
 #layersList {
-    overflow: auto;
     max-height: 100%;
 
     color: white;
@@ -313,8 +317,6 @@ body {
 
 #layersControls {
     display: flex;
-    
-    height: 3%;
 
     bottom: 0;
 
