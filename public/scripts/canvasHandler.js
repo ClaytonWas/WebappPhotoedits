@@ -87,7 +87,7 @@ window.addEventListener('imageEditorReady', (event) => {
         */
         
         // Limit zoom level to 0.1-10 times original size.
-        scale = Math.min(Math.max(0.1, scale), 10)
+        scale = Math.min(Math.max(0.5, scale), 20)
   
         // Calculate the new position after scale
         const afterTransformX = (mouseX - currentTranslate.x) / scale
