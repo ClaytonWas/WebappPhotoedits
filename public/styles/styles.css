@@ -281,8 +281,6 @@ body {
 
 /* Image Module End */
 
-
-
 /* Layers Module */
 .layersModule {
     display: flex;
@@ -352,3 +350,20 @@ body {
     width: 20vw;
 }
 /* Layers Module End */
+
+/* Layer Properties Module */
+.layerPropertiesOpacity {
+    color: white;
+}
+
+.layerPropertiesOpacity p {
+    font-weight: bold;
+}
+
+.layerPropertiesOpacity input {
+    color: white;
+    background-color:#2d2d2d;
+
+    width: 25%;
+}
+/* Layer Properties Module End */

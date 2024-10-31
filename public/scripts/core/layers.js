@@ -7,7 +7,7 @@ export class Layer {
     }
 
     applyEffect(image) {
-        this.effect(image.data)
+        this.effect(image.data, this.opacity)
     }
 }
 
@@ -29,7 +29,7 @@ export class LayerManager {
 
     applyLayerEffects(image) {
         for (const layer of this.layers) {
-            if (layer.effect && layer.visible) {
+            if (layer.effect && layer.visible && !this.opacity) {
                 layer.applyEffect(image)
                 console.log(`Applying effect of layer: ${layer.name}`)
             }

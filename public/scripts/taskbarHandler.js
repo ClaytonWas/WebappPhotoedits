@@ -17,6 +17,8 @@ function resetEditor() {
     document.getElementById('imageDimensions').textContent = '';
     document.getElementById('titleExtension').textContent = '';
     document.getElementById('imageExtension').textContent = '';
+    document.getElementById("currentLayerSelector").innerHTML = '';
+
 
     // Clear layers list
     document.getElementById('layersList').innerHTML = '';

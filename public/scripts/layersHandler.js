@@ -33,6 +33,59 @@ function renderLayersList(imageEditor) {
     imageEditor.layerManager.selectedLayerIndex = null
 }
 
+function renderLayerProperties(imageEditor) {
+    let propertiesDiv = document.getElementById("currentLayerSelector")
+    let selectedLayerIndex = imageEditor.getSelectedIndex()
+
+    propertiesDiv.innerHTML = ''
+
+    if (!imageEditor.layerManager.layers[selectedLayerIndex]) {
+        return
+    } 
+    
+    let layer = imageEditor.layerManager.layers[selectedLayerIndex]
+
+    propertiesDiv.classList.add('layerPropertiesOpacity')
+    let opacityDiv = document.createElement("div")
+    let opacityP = document.createElement("p")
+    opacityP.textContent = 'Opacity'
+    
+    let opacitySlider = document.createElement("input")
+    opacitySlider.type = 'range'
+    opacitySlider.min = '0'
+    opacitySlider.max = '1'
+    opacitySlider.step = '0.01'
+    opacitySlider.value = layer.opacity
+
+    let opacityInput = document.createElement("input")
+    opacityInput.value = layer.opacity
+
+    opacityDiv.appendChild(opacityP)
+    opacityDiv.appendChild(opacitySlider)
+    opacityDiv.appendChild(opacityInput)
+    propertiesDiv.appendChild(opacityDiv)
+
+    opacitySlider.addEventListener('change', () => {
+        opacityInput.value = opacitySlider.value
+        layer.opacity = opacitySlider.value
+
+        imageEditor.renderImage()
+    })
+
+    opacityInput.addEventListener('change', () => {
+        if (opacityInput.value > 1) {
+            opacityInput.value = 1
+        } else if (opacityInput.value < 0) {
+            opacityInput.value = 0
+        }
+        opacityInput.value = parseFloat(opacityInput.value).toFixed(2)
+        opacitySlider.value = opacityInput.value
+        layer.opacity = opacitySlider.value
+
+        imageEditor.renderImage()
+    })
+}
+
 window.addEventListener('imageEditorReady', (event) => {
     let imageEditor = event.detail.instance;
 
@@ -47,7 +100,8 @@ window.addEventListener('imageEditorReady', (event) => {
                 layer.classList.remove('selectedLayerDiv')
             })
             selectedLayer_HTMLDiv.classList.add('selectedLayerDiv')
-            imageEditor.setSelectedIndex(Number(selectedLayer_HTMLDiv.id))
+            imageEditor.setSelectedIndex(selectedLayer_HTMLDiv.id)
+            renderLayerProperties(imageEditor, selectedLayer_HTMLDiv.id)
         }
     })
 
@@ -93,7 +147,8 @@ window.addEventListener('imageEditorReady', (event) => {
         // Then call renderLayers
         renderLayersList(imageEditor)
         layersList_HTMLElement.lastElementChild.classList.add('selectedLayerDiv')
-        imageEditor.setSelectedIndex(Number(layersList_HTMLElement.lastElementChild.id))
+        imageEditor.setSelectedIndex(layersList_HTMLElement.lastElementChild.id)
+        renderLayerProperties(imageEditor, layersList_HTMLElement.lastElementChild.id)
     })
 
     document.getElementById('deleteLayer').addEventListener('click', () => {
@@ -105,5 +160,7 @@ window.addEventListener('imageEditorReady', (event) => {
         }
 
         renderLayersList(imageEditor)
+        renderLayerProperties(imageEditor, selectedLayerIndex)
+
     })
 })
