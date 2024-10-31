@@ -285,7 +285,7 @@ body {
     width: 20vw;
 
     border: 2px solid #464646;
-    background-color: #5d5d5d;
+    background-color: #545454;
 }
 
 .layersModule > div{
@@ -299,24 +299,30 @@ body {
 #layersSelector {
     position: relative;
     
-    height: 30%;
+    height: 27%;
+    
+    background-color: #545454;
 }
 
 #layersList {
     overflow: auto;
-    max-height: 95%;
+    max-height: 100%;
 
     color: white;
 }
 
 #layersControls {
-    position: absolute;
     display: flex;
-    justify-content: space-between;
     
-    height: 5%;
+    height: 3%;
 
     bottom: 0;
+
+    background-color: #545454;
+}
+
+#layersControls button {
+    margin: 1%;
 }
 
 .layerDiv {
