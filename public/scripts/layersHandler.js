@@ -48,7 +48,7 @@ function renderLayerProperties(imageEditor) {
     propertiesDiv.classList.add('layerPropertiesOpacity')
     let opacityDiv = document.createElement("div")
     let opacityP = document.createElement("p")
-    opacityP.textContent = 'Opacity'
+    opacityP.textContent = 'Intensity'
     
     let opacitySlider = document.createElement("input")
     opacitySlider.type = 'range'
