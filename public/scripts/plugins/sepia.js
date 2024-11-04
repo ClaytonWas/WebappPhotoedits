@@ -1,5 +1,5 @@
 export function sepia(data, parameters = {}) {
-    const intensity = parameters.intensity ?? 0.2;
+    const intensity = parameters.intensity ?? 1;
 
     for (let i = 0; i < data.length; i += 4) {
         const R = Math.min(255, (data[i] * 0.393) + (data[i + 1] * 0.769) + (data[i + 2] * 0.189));
