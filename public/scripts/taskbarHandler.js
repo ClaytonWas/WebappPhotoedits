@@ -105,39 +105,41 @@ function renderLayerProperties(imageEditor) {
 
     // Layer displays parameters that are needed.
     if (layer.effect && layer.effectParameters) {
-        Object.entries(layer.effectParameters).forEach(([parameterName, parameterValue]) => {
+        Object.entries(layer.effectParameters).forEach(([parameterName, parameterConfig]) => {
             let parameterDiv = document.createElement("div")
             parameterDiv.classList.add('effectParameter')
             let parameterP = document.createElement("p")
             parameterP.textContent = parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
+
+            const { value: parameterValue, range = [0, 1] } = parameterConfig
             
             let parameterSlider = document.createElement("input")
             let parameterInput = document.createElement("input")
 
             if (typeof parameterValue === 'number') {
                 parameterSlider.type = 'range'
-                parameterSlider.min = '0'
-                parameterSlider.max = '1'
-                parameterSlider.step = '0.1'
+                parameterSlider.min = range[0]
+                parameterSlider.max = range[1]
+                parameterSlider.step = (range[1] - range[0]) / 100
                 parameterSlider.value = parameterValue
 
                 parameterInput.type = 'number'
-                parameterInput.step = '0.1'
+                parameterInput.min = range[0]
+                parameterInput.max = range[1]
+                parameterInput.step = (range[1] - range[0]) / 100
                 parameterInput.value = parameterValue
 
                 parameterSlider.addEventListener('mouseup', () => {
                     parameterInput.value = parameterSlider.value
-                    const params = { ...layer.effectParameters }
-                    params[parameterName] = parseFloat(parameterSlider.value)
-                    layer.setEffectParams(params)
+                    layer.effectParameters[parameterName].value = parseFloat(parameterSlider.value)
+                    layer.setEffectParams(layer.effectParameters)
                     imageEditor.renderImage()
                 })
 
                 parameterInput.addEventListener('change', () => {
                     parameterSlider.value = parameterInput.value
-                    const params = { ...layer.effectParameters }
-                    params[parameterName] = parseFloat(parameterInput.value)
-                    layer.setEffectParams(params)
+                    layer.effectParameters[parameterName].value = parseFloat(parameterInput.value)
+                    layer.setEffectParams(layer.effectParameters)
                     imageEditor.renderImage()
                 })
 
@@ -149,23 +151,20 @@ function renderLayerProperties(imageEditor) {
                 parameterInput.checked = parameterValue
 
                 parameterInput.addEventListener('change', () => {
-                    const params = { ...layer.effectParameters }
-                    params[parameterName] = parameterInput.checked
-                    layer.setEffectParams(params)
+                    layer.effectParameters[parameterName].value = parameterInput.checked
+                    layer.setEffectParams(layer.effectParameters)
                     imageEditor.renderImage()
                 })
 
                 parameterDiv.appendChild(parameterP)
                 parameterDiv.appendChild(parameterInput)
             } else {
-                // Garbage input collection
                 parameterInput.type = 'text'
                 parameterInput.value = parameterValue
 
                 parameterInput.addEventListener('change', () => {
-                    const params = { ...layer.effectParameters }
-                    params[parameterName] = parameterInput.value
-                    layer.setEffectParams(params)
+                    layer.effectParameters[parameterName].value = parameterInput.value
+                    layer.setEffectParams(layer.effectParameters)
                     imageEditor.renderImage()
                 })
 
@@ -180,20 +179,13 @@ function renderLayerProperties(imageEditor) {
     opacitySlider.addEventListener('change', () => {
         opacityInput.value = opacitySlider.value
         layer.opacity = opacitySlider.value
-
         imageEditor.renderImage()
     })
 
     opacityInput.addEventListener('change', () => {
-        if (opacityInput.value > 1) {
-            opacityInput.value = 1
-        } else if (opacityInput.value < 0) {
-            opacityInput.value = 0
-        }
-        opacityInput.value = parseFloat(opacityInput.value).toFixed(2)
+        opacityInput.value = Math.min(Math.max(parseFloat(opacityInput.value), 0), 1).toFixed(2)
         opacitySlider.value = opacityInput.value
         layer.opacity = opacitySlider.value
-
         imageEditor.renderImage()
     })
 }
@@ -290,7 +282,7 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(), 
             sepia,
             {
-                intensity: 1
+                intensity: { value: 1, range: [0, 1] }
             }
         )
         renderLayerProperties(imageEditor)
@@ -302,8 +294,9 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             filmEffects,
             {
-                saturation: 1,
-                contrast: 1
+                saturation: { value: 0, range: [0, 255] },
+                contrast: { value: 0, range: [0, 255] },
+                colourPalette: { value: 0, range: [-100, 100] }
             }
         )
         renderLayerProperties(imageEditor)
