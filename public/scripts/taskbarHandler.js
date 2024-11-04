@@ -1,4 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
+import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
 
@@ -17,6 +18,8 @@ function resetEditor() {
     document.getElementById('imageDimensions').textContent = '';
     document.getElementById('titleExtension').textContent = '';
     document.getElementById('imageExtension').textContent = '';
+    document.getElementById("currentLayerSelector").innerHTML = '';
+
 
     // Clear layers list
     document.getElementById('layersList').innerHTML = '';
@@ -68,6 +71,132 @@ function closeResizeModule() {
 
 }
 
+function renderLayerProperties(imageEditor) {
+    let propertiesDiv = document.getElementById("currentLayerSelector")
+    let selectedLayerIndex = imageEditor.getSelectedIndex()
+
+    propertiesDiv.innerHTML = ''
+
+    if (!imageEditor.layerManager.layers[selectedLayerIndex]) {
+        return
+    } 
+    
+    let layer = imageEditor.layerManager.layers[selectedLayerIndex]
+
+    propertiesDiv.classList.add('layerPropertiesOpacity')
+    let opacityDiv = document.createElement("div")
+    let opacityP = document.createElement("p")
+    opacityP.textContent = 'Opacity'
+    
+    let opacitySlider = document.createElement("input")
+    opacitySlider.type = 'range'
+    opacitySlider.min = '0'
+    opacitySlider.max = '1'
+    opacitySlider.step = '0.01'
+    opacitySlider.value = layer.opacity
+
+    let opacityInput = document.createElement("input")
+    opacityInput.value = layer.opacity
+
+    opacityDiv.appendChild(opacityP)
+    opacityDiv.appendChild(opacitySlider)
+    opacityDiv.appendChild(opacityInput)
+    propertiesDiv.appendChild(opacityDiv)
+
+    // Layer displays parameters that are needed.
+    if (layer.effect && layer.effectParameters) {
+        Object.entries(layer.effectParameters).forEach(([parameterName, parameterValue]) => {
+            let parameterDiv = document.createElement("div")
+            parameterDiv.classList.add('effectParameter')
+            let parameterP = document.createElement("p")
+            parameterP.textContent = parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
+            
+            let parameterSlider = document.createElement("input")
+            let parameterInput = document.createElement("input")
+
+            if (typeof parameterValue === 'number') {
+                parameterSlider.type = 'range'
+                parameterSlider.min = '0'
+                parameterSlider.max = '1'
+                parameterSlider.step = '0.1'
+                parameterSlider.value = parameterValue
+
+                parameterInput.type = 'number'
+                parameterInput.step = '0.1'
+                parameterInput.value = parameterValue
+
+                parameterSlider.addEventListener('input', () => {
+                    parameterInput.value = parameterSlider.value
+                    const params = { ...layer.effectParameters }
+                    params[parameterName] = parseFloat(parameterSlider.value)
+                    layer.setEffectParams(params)
+                    imageEditor.renderImage()
+                })
+
+                parameterInput.addEventListener('change', () => {
+                    parameterSlider.value = parameterInput.value
+                    const params = { ...layer.effectParameters }
+                    params[parameterName] = parseFloat(parameterInput.value)
+                    layer.setEffectParams(params)
+                    imageEditor.renderImage()
+                })
+
+                parameterDiv.appendChild(parameterP)
+                parameterDiv.appendChild(parameterSlider)
+                parameterDiv.appendChild(parameterInput)
+            } else if (typeof parameterValue === 'boolean') {
+                parameterInput.type = 'checkbox'
+                parameterInput.checked = parameterValue
+
+                parameterInput.addEventListener('change', () => {
+                    const params = { ...layer.effectParameters }
+                    params[parameterName] = parameterInput.checked
+                    layer.setEffectParams(params)
+                    imageEditor.renderImage()
+                })
+
+                parameterDiv.appendChild(parameterP)
+                parameterDiv.appendChild(parameterInput)
+            } else {
+                // Garbage input collection
+                parameterInput.type = 'text'
+                parameterInput.value = parameterValue
+
+                parameterInput.addEventListener('change', () => {
+                    const params = { ...layer.effectParameters }
+                    params[parameterName] = parameterInput.value
+                    layer.setEffectParams(params)
+                    imageEditor.renderImage()
+                })
+
+                parameterDiv.appendChild(parameterP)
+                parameterDiv.appendChild(parameterInput)
+            }
+
+            propertiesDiv.appendChild(parameterDiv)
+        })
+    }
+
+    opacitySlider.addEventListener('change', () => {
+        opacityInput.value = opacitySlider.value
+        layer.opacity = opacitySlider.value
+
+        imageEditor.renderImage()
+    })
+
+    opacityInput.addEventListener('change', () => {
+        if (opacityInput.value > 1) {
+            opacityInput.value = 1
+        } else if (opacityInput.value < 0) {
+            opacityInput.value = 0
+        }
+        opacityInput.value = parseFloat(opacityInput.value).toFixed(2)
+        opacitySlider.value = opacityInput.value
+        layer.opacity = opacitySlider.value
+
+        imageEditor.renderImage()
+    })
+}
 
 window.addEventListener('load', () => {
 
@@ -143,20 +272,41 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('rotateImage').addEventListener('click', () => {
-        console.log('clicked!')
-        imageEditor.canvas.style.transform = 'rotate(90deg)'
+        //Cool!
     })
 
 
 
     // Filter applications
     document.getElementById('greyscale').addEventListener('click', () => {
-        imageEditor.layerManager.addLayerEffect(imageEditor.getSelectedIndex(), greyscale)
+        let index = imageEditor.getSelectedIndex()
+        imageEditor.layerManager.addLayerEffect(index, greyscale)
+        renderLayerProperties(imageEditor)
         imageEditor.renderImage()
     })
 
     document.getElementById('sepia').addEventListener('click', () => {
-        imageEditor.layerManager.addLayerEffect(imageEditor.getSelectedIndex(), sepia)
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(), 
+            sepia,
+            {
+                intensity: 1
+            }
+        )
+        renderLayerProperties(imageEditor)
         imageEditor.renderImage()
     })
-});
+
+    document.getElementById('filmEffects').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            filmEffects,
+            {
+                saturation: 1,
+                contrast: 1
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+})

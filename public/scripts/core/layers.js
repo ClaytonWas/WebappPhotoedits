@@ -1,13 +1,35 @@
 export class Layer {
-    constructor(name="New Layer", visible = true, opacity = 1, effect=null) {
+    constructor(name="New Layer", visible = true, opacity = 1, effect=null, effectParameters = {}) {
         this.name = name
         this.visible = visible
         this.opacity = opacity
         this.effect = effect
+        this.effectParameters = effectParameters
     }
 
     applyEffect(image) {
-        this.effect(image.data)
+        if (!this.effect) return
+    
+        // Check if effect supports parameters
+        if (typeof this.effect === 'function') {
+            if (this.effectParameters != {}) {
+                this.effect(image.data, this.effectParameters)
+            } else {
+                this.effect(image.data)
+            }
+        }
+    }
+
+    setEffect(selectedEffect, parameters = {}) {
+        this.effect = selectedEffect
+        this.effectParameters = parameters
+    }
+
+    setEffectParams(parameters) {
+        this.effectParameters = {
+            ...this.effectParameters,
+            ...parameters
+        }
     }
 }
 
@@ -23,15 +45,15 @@ export class LayerManager {
         this.selectedLayerIndex = this.layers.length
     }
 
-    addLayerEffect(index, effect) {
-        this.layers[index].effect = effect
+    addLayerEffect(index, effect, parameters = {}) {
+        this.layers[index].setEffect(effect, parameters)
     }
 
     applyLayerEffects(image) {
         for (const layer of this.layers) {
-            if (layer.effect && layer.visible) {
+            if (layer.effect && layer.visible && layer.opacity > 0) {
                 layer.applyEffect(image)
-                console.log(`Applying effect of layer: ${layer.name}`)
+                console.log(`Applying effect of layer: ${layer.name}`, layer.effectParameters)
             }
         }
     }
