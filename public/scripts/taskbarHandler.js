@@ -294,7 +294,7 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             filmEffects,
             {
-                saturation: { value: 1, range: [0, 2] },
+                saturation: { value: 0, range: [0, 255] },
                 contrast: { value: 0, range: [0, 255] },
                 colourPalette: { value: 0, range: [-100, 100] }
             }
