@@ -1,4 +1,5 @@
-export function greyscale(data, opacity = 1) {
+export function greyscale(data) {
+    let opacity = 1
     for (let i = 0; i < data.length; i += 4) {
         const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
         
