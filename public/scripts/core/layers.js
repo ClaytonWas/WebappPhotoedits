@@ -8,16 +8,15 @@ export class Layer {
     }
 
     applyEffect(image) {
-        if (!this.effect) return
+        if (!this.effect) return;
     
-        // Check if effect supports parameters
-        if (typeof this.effect === 'function') {
-            if (this.effectParameters != {}) {
-                this.effect(image.data, this.effectParameters)
-            } else {
-                this.effect(image.data)
-            }
+        // Prepare parameters with only "value:" properties for each effect parameter
+        const params = {};
+        for (const [key, config] of Object.entries(this.effectParameters)) {
+            params[key] = config.value;  // Extract only the value for each parameter
         }
+    
+        this.effect(image.data, params);
     }
 
     setEffect(selectedEffect, parameters = {}) {
@@ -26,9 +25,11 @@ export class Layer {
     }
 
     setEffectParams(parameters) {
-        this.effectParameters = {
-            ...this.effectParameters,
-            ...parameters
+        // Iterate over each parameter to ensure only the value is modified
+        for (let key in parameters) {
+            if (this.effectParameters[key]) {
+                this.effectParameters[key].value = parameters[key].value;
+            }
         }
     }
 }
