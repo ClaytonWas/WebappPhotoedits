@@ -87,7 +87,7 @@ function renderLayerProperties(imageEditor) {
                 parameterInput.step = '0.1'
                 parameterInput.value = parameterValue
 
-                parameterSlider.addEventListener('input', () => {
+                parameterSlider.addEventListener('mouseup', () => {
                     parameterInput.value = parameterSlider.value
                     const params = { ...layer.effectParameters }
                     params[parameterName] = parseFloat(parameterSlider.value)
