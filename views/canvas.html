@@ -36,9 +36,8 @@
         <div class="taskbarItem">
             <span>Image</span>
             <ul class="taskbarItemDropdown">
+                <li id="hsv">HSV Adjustment</li>
                 <li id="rotateImage">Rotate</li>
-                <li>Rescale</li>
-                <li>Crop</li>
             </ul>
         </div>
 
@@ -92,6 +91,28 @@
                 </div>
         </div>
         <button class="taskbarModuleSubmit" id="resizeSubmit">Resize</button>
+    </div>
+
+    <div class="hsvModule" id="hsvModule">
+        <div class="taskbarModuleTitle">
+            <p>Hue-Saturation Value Adjustment</p>
+            <button class="taskbarModuleClose" id="hsvCancel">x</button>
+        </div>
+        <div class="taskbarModuleContent">
+            <div class="taskbarModuleOneLine">
+                <p>Hue</p>
+                <input type="range" min="-180" max="180" step="1" value="0" id="hueSlider">
+            </div>
+            <div class="taskbarModuleOneLine">
+                <p>Saturation</p>
+                <input type="range" min="0" max="200" step="1" value="100" id="saturationSlider">
+            </div>
+            <div class="taskbarModuleOneLine">
+                <p>Brightness</p>
+                <input type="range" min="0" max="200" step="1" value="100" id="brightnessSlider">
+            </div>
+        </div>
+        <button class="taskbarModuleSubmit" id="hsvReset">Reset</button>
     </div>
 
     <!-- Wrapper For Image And Layer Modules-->

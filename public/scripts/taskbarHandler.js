@@ -27,6 +27,10 @@ function resetEditor() {
 
     // Hide or reset any other UI modules
     closeResizeModule();
+    closeHSVModule();
+    hueSlider.value = 0
+    saturationSlider.value = 100
+    brightnessSlider.value = 100
 }
 
 async function uploadImage() {
@@ -67,6 +71,17 @@ function openResizeModule() {
 
 function closeResizeModule() {
     document.getElementById('resizeModule').style.display = 'none'
+    document.querySelector('.taskbarItemDropdown').classList.remove('noTaskbarItemCollapse')
+
+}
+
+function openHSVModule() {
+    document.getElementById('hsvModule').style.display = 'block'
+    document.querySelector('.taskbarItemDropdown').classList.add('noTaskbarItemCollapse')
+}
+
+function closeHSVModule() {
+    document.getElementById('hsvModule').style.display = 'none'
     document.querySelector('.taskbarItemDropdown').classList.remove('noTaskbarItemCollapse')
 
 }
@@ -207,6 +222,8 @@ window.addEventListener('load', () => {
         imageEditor.quickExport()
     })
 
+
+    // Core image modifications
     document.getElementById('resize').addEventListener('click', () => {
         openResizeModule()
     })
@@ -263,12 +280,65 @@ window.addEventListener('load', () => {
         imageEditor.resizeCanvas(newHeight, newWidth, isConstrained, interpolationType)
     })
 
+    document.getElementById('hsv').addEventListener('click', () => {
+        openHSVModule()
+    })
+
+    document.getElementById('hsvCancel').addEventListener('click', () => {
+        closeHSVModule()
+    })
+
+    let hueSlider = document.getElementById('hueSlider')
+    let saturationSlider = document.getElementById('saturationSlider')
+    let brightnessSlider = document.getElementById('brightnessSlider')
+    hueSlider.addEventListener('change', () => {
+        console.log(hueSlider.value)
+        imageEditor.context.filter = `
+            hue-rotate(${hueSlider.value}deg)
+            saturate(${saturationSlider.value}%)
+            brightness(${brightnessSlider.value}%)
+        `
+        imageEditor.context.filter = `hue-rotate(${hueSlider.value}deg)`
+        imageEditor.renderImage()
+    })
+    saturationSlider.addEventListener('change', () => {
+        console.log(saturationSlider.value)
+        imageEditor.context.filter = `
+            hue-rotate(${hueSlider.value}deg)
+            saturate(${saturationSlider.value}%)
+            brightness(${brightnessSlider.value}%)
+        `
+        imageEditor.renderImage()
+    })
+    brightnessSlider.addEventListener('change', () => {
+        console.log(brightnessSlider.value)
+        imageEditor.context.filter = `
+            hue-rotate(${hueSlider.value}deg)
+            saturate(${saturationSlider.value}%)
+            brightness(${brightnessSlider.value}%)
+        `
+        imageEditor.renderImage()
+    })
+
+    document.getElementById('hsvReset').addEventListener('click', () => {
+        hueSlider.value = 0
+        saturationSlider.value = 100
+        brightnessSlider.value = 100
+        imageEditor.context.filter = `
+            hue-rotate(0deg)
+            saturate(100%)
+            brightness(100%)
+        `
+        imageEditor.renderImage()
+    })
+
     document.getElementById('rotateImage').addEventListener('click', () => {
-        //Cool!
+        // Implement this soon!
+        console.log('Rotate Image!')
     })
 
 
-
+    
     // Filter applications
     document.getElementById('greyscale').addEventListener('click', () => {
         let index = imageEditor.getSelectedIndex()
@@ -294,7 +364,6 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             filmEffects,
             {
-                saturation: { value: 0, range: [0, 255] },
                 contrast: { value: 0, range: [0, 255] },
                 colourPalette: { value: 0, range: [-100, 100] }
             }

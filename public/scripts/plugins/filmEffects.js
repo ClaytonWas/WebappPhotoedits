@@ -1,8 +1,7 @@
 export function filmEffects(data, parameters = {}) {
-    const saturation = parameters.saturation ?? 1.0
     const contrast = parameters.contrast ?? 1.0
     const colourPalette = parameters.colourPalette ?? 0
-    
+
     for (let i = 0; i < data.length; i += 4) {
         for (let j = 0; j < 3; j++) {
             if (data[i + j] < contrast) {

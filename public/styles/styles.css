@@ -178,6 +178,21 @@ body {
     color: white;
     background-color: #3d3d3d;
 }
+
+.hsvModule {
+    z-index: 6;
+    display: none;
+
+    position: absolute;
+
+    top: 50%;
+    left: 15%;
+
+    width: 20vw;
+
+    color: white;
+    background-color: #3d3d3d;
+}
 /* Taskbar End */
 
 .wrapImageAndLayerModules {
