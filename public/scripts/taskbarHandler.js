@@ -1,4 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
+import { paintedStylization } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -66,24 +67,18 @@ async function uploadImage() {
 
 function openResizeModule() {
     document.getElementById('resizeModule').style.display = 'block'
-    document.querySelector('.taskbarItemDropdown').classList.add('noTaskbarItemCollapse')
 }
 
 function closeResizeModule() {
     document.getElementById('resizeModule').style.display = 'none'
-    document.querySelector('.taskbarItemDropdown').classList.remove('noTaskbarItemCollapse')
-
 }
 
 function openHSVModule() {
     document.getElementById('hsvModule').style.display = 'block'
-    document.querySelector('.taskbarItemDropdown').classList.add('noTaskbarItemCollapse')
 }
 
 function closeHSVModule() {
     document.getElementById('hsvModule').style.display = 'none'
-    document.querySelector('.taskbarItemDropdown').classList.remove('noTaskbarItemCollapse')
-
 }
 
 function renderLayerProperties(imageEditor) {
@@ -126,7 +121,7 @@ function renderLayerProperties(imageEditor) {
             let parameterP = document.createElement("p")
             parameterP.textContent = parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
 
-            const { value: parameterValue, range = [0, 1] } = parameterConfig
+            const { value: parameterValue, range = [0, 1], valueStep: stepValue} = parameterConfig
             
             let parameterSlider = document.createElement("input")
             let parameterInput = document.createElement("input")
@@ -135,13 +130,13 @@ function renderLayerProperties(imageEditor) {
                 parameterSlider.type = 'range'
                 parameterSlider.min = range[0]
                 parameterSlider.max = range[1]
-                parameterSlider.step = (range[1] - range[0]) / 100
+                parameterSlider.step = stepValue
                 parameterSlider.value = parameterValue
 
                 parameterInput.type = 'number'
                 parameterInput.min = range[0]
                 parameterInput.max = range[1]
-                parameterInput.step = (range[1] - range[0]) / 100
+                parameterInput.step = stepValue
                 parameterInput.value = parameterValue
 
                 parameterSlider.addEventListener('mouseup', () => {
@@ -293,43 +288,49 @@ window.addEventListener('load', () => {
     let brightnessSlider = document.getElementById('brightnessSlider')
     hueSlider.addEventListener('change', () => {
         console.log(hueSlider.value)
-        imageEditor.context.filter = `
+        if(imageEditor) {
+            imageEditor.context.filter = `
             hue-rotate(${hueSlider.value}deg)
             saturate(${saturationSlider.value}%)
             brightness(${brightnessSlider.value}%)
-        `
-        imageEditor.context.filter = `hue-rotate(${hueSlider.value}deg)`
-        imageEditor.renderImage()
+            `
+            imageEditor.renderImage()
+        }
     })
     saturationSlider.addEventListener('change', () => {
         console.log(saturationSlider.value)
-        imageEditor.context.filter = `
+        if(imageEditor) {
+            imageEditor.context.filter = `
             hue-rotate(${hueSlider.value}deg)
             saturate(${saturationSlider.value}%)
             brightness(${brightnessSlider.value}%)
-        `
-        imageEditor.renderImage()
+            `
+            imageEditor.renderImage()
+        }
     })
     brightnessSlider.addEventListener('change', () => {
         console.log(brightnessSlider.value)
-        imageEditor.context.filter = `
+        if(imageEditor) {
+            imageEditor.context.filter = `
             hue-rotate(${hueSlider.value}deg)
             saturate(${saturationSlider.value}%)
             brightness(${brightnessSlider.value}%)
-        `
-        imageEditor.renderImage()
+            `
+            imageEditor.renderImage()
+        }
     })
-
     document.getElementById('hsvReset').addEventListener('click', () => {
         hueSlider.value = 0
         saturationSlider.value = 100
         brightnessSlider.value = 100
-        imageEditor.context.filter = `
+        if(imageEditor) {
+            imageEditor.context.filter = `
             hue-rotate(0deg)
             saturate(100%)
             brightness(100%)
-        `
-        imageEditor.renderImage()
+            `
+            imageEditor.renderImage()
+        }
     })
 
     document.getElementById('rotateImage').addEventListener('click', () => {
@@ -352,7 +353,7 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(), 
             sepia,
             {
-                intensity: { value: 1, range: [0, 1] }
+                intensity: { value: 1, range: [0, 1], valueStep: 0.01 }
             }
         )
         renderLayerProperties(imageEditor)
@@ -364,8 +365,22 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             filmEffects,
             {
-                contrast: { value: 0, range: [0, 255] },
-                colourPalette: { value: 0, range: [-100, 100] }
+                contrast: { value: 0, range: [0, 255], valueStep: 1 },
+                colourPalette: { value: 0, range: [-100, 100], valueStep: 1 }
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+    document.getElementById('paintedStylization').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            paintedStylization,
+            {
+                width: { value: 5, range: [0, 100], valueStep: 1 },
+                length: { value: 5, range: [0, 100], valueStep: 1 },
+                angle: {value: 45, range: [0, 360], valueStep: 1 },
+                sampling: {value: 10, range: [2, 100], valueStep: 1}
             }
         )
         renderLayerProperties(imageEditor)

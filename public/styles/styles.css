@@ -44,10 +44,6 @@ body {
     padding: 10px;
 }
 
-.noTaskbarItemCollapse {
-    display: block !important;
-}
-
 .taskbarItem {
     z-index: 5;
 

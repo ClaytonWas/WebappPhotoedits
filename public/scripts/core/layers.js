@@ -1,10 +1,11 @@
 export class Layer {
-    constructor(name="New Layer", visible = true, opacity = 1, effect=null, effectParameters = {}) {
+    constructor(name="New Layer", visible = true, opacity = 1, effect=null, effectParameters = {}, valueStep = 0.01) {
         this.name = name
         this.visible = visible
         this.opacity = opacity
         this.effect = effect
         this.effectParameters = effectParameters
+        this.valueStep = valueStep
     }
 
     applyEffect(image) {
@@ -19,9 +20,10 @@ export class Layer {
         this.effect(image.data, params);
     }
 
-    setEffect(selectedEffect, parameters = {}) {
+    setEffect(selectedEffect, parameters = {}, valueStep) {
         this.effect = selectedEffect
         this.effectParameters = parameters
+        this.valueStep = valueStep
     }
 
     setEffectParams(parameters) {
@@ -46,8 +48,8 @@ export class LayerManager {
         this.selectedLayerIndex = this.layers.length
     }
 
-    addLayerEffect(index, effect, parameters = {}) {
-        this.layers[index].setEffect(effect, parameters)
+    addLayerEffect(index, effect, parameters = {}, valueStep) {
+        this.layers[index].setEffect(effect, parameters, valueStep)
     }
 
     applyLayerEffects(image) {

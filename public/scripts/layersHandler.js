@@ -73,7 +73,7 @@ function renderLayerProperties(imageEditor) {
             let parameterP = document.createElement("p")
             parameterP.textContent = parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
 
-            const { value: parameterValue, range = [0, 1] } = parameterConfig
+            const { value: parameterValue, range = [0, 1], valueStep: stepValue} = parameterConfig
             
             let parameterSlider = document.createElement("input")
             let parameterInput = document.createElement("input")
@@ -82,13 +82,13 @@ function renderLayerProperties(imageEditor) {
                 parameterSlider.type = 'range'
                 parameterSlider.min = range[0]
                 parameterSlider.max = range[1]
-                parameterSlider.step = (range[1] - range[0]) / 100
+                parameterSlider.step = stepValue
                 parameterSlider.value = parameterValue
 
                 parameterInput.type = 'number'
                 parameterInput.min = range[0]
                 parameterInput.max = range[1]
-                parameterInput.step = (range[1] - range[0]) / 100
+                parameterInput.step = stepValue
                 parameterInput.value = parameterValue
 
                 parameterSlider.addEventListener('mouseup', () => {
