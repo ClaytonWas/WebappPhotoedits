@@ -17,7 +17,7 @@ export class Layer {
             params[key] = config.value;  // Extract only the value for each parameter
         }
     
-        this.effect(image.data, params);
+        this.effect(image, params);
     }
 
     setEffect(selectedEffect, parameters = {}, valueStep) {

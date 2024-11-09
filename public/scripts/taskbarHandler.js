@@ -1,5 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
-import { paintedStylization } from './plugins/paintedStylization.js'
+import { paintedStylization, pointsInSpace, paintStroke, linesInSpace } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -29,9 +29,7 @@ function resetEditor() {
     // Hide or reset any other UI modules
     closeResizeModule();
     closeHSVModule();
-    hueSlider.value = 0
-    saturationSlider.value = 100
-    brightnessSlider.value = 100
+    document.getElementById('hsvReset').click()
 }
 
 async function uploadImage() {
@@ -273,6 +271,7 @@ window.addEventListener('load', () => {
         let interpolationType = document.getElementById('interpolationType').value
 
         imageEditor.resizeCanvas(newHeight, newWidth, isConstrained, interpolationType)
+        document.getElementById('hsvReset').click()
     })
 
     document.getElementById('hsv').addEventListener('click', () => {
@@ -386,4 +385,50 @@ window.addEventListener('load', () => {
         renderLayerProperties(imageEditor)
         imageEditor.renderImage()
     })
+
+
+    // Visualization filters (for concepts from labs and other cool things that I couldn't fit neatly into a catagory.)
+    document.getElementById('pointsInSpace').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            pointsInSpace,
+            {
+                sampling: {value: 10, range: [2, 100], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+
+    document.getElementById('linesInSpace').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            linesInSpace,
+            {
+                width: { value: 1, range: [0, 10], valueStep: 1 },
+                length: { value: 3, range: [0, 10], valueStep: 1 },
+                angle: {value: 90, range: [0, 360], valueStep: 1 },
+                sampling: {value: 10, range: [2, 100], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+
+    document.getElementById('paintStroke').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            paintStroke,
+            {
+                width: { value: 5, range: [0, 10], valueStep: 1 },
+                length: { value: 5, range: [0, 10], valueStep: 1 },
+                angle: {value: 45, range: [0, 360], valueStep: 1 },
+                sampling: {value: 10, range: [2, 100], valueStep: 1},
+                edgeThreshold: {value: 100, range: [0, 200], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+    
 })

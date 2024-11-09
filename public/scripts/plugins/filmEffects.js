@@ -1,4 +1,6 @@
-export function filmEffects(data, parameters = {}) {
+export function filmEffects(image, parameters = {}) {
+    let data = image.data
+    
     const contrast = parameters.contrast ?? 1.0
     const colourPalette = parameters.colourPalette ?? 0
 

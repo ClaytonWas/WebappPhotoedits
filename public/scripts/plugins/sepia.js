@@ -1,4 +1,6 @@
-export function sepia(data, parameters = {}) {
+export function sepia(image, parameters = {}) {
+    let data = image.data
+    
     const intensity = parameters.intensity ?? 1;
 
     for (let i = 0; i < data.length; i += 4) {
