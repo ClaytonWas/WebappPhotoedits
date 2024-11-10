@@ -1,5 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
-import { paintedStylization, pointsInSpace, paintStroke, linesInSpace } from './plugins/paintedStylization.js'
+import { paintedStylization, pointsInSpace, paintStroke, vectorsInSpace } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -400,15 +400,19 @@ window.addEventListener('load', () => {
         imageEditor.renderImage()
     })
 
-    document.getElementById('linesInSpace').addEventListener('click', () => {
+    document.getElementById('vectorsInSpace').addEventListener('click', () => {
         imageEditor.layerManager.addLayerEffect(
             imageEditor.getSelectedIndex(),
-            linesInSpace,
+            vectorsInSpace,
             {
-                width: { value: 1, range: [0, 10], valueStep: 1 },
-                length: { value: 3, range: [0, 10], valueStep: 1 },
+                width: { value: 1, range: [1, 500], valueStep: 1 },
+                length: { value: 3, range: [1, 1000], valueStep: 1 },
                 angle: {value: 90, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [2, 100], valueStep: 1}
+                sampling: {value: 10, range: [2, 1000000], valueStep: 1},
+                R: {value: 255, range: [0, 255], valueStep: 1},
+                G: {value: 255, range: [0, 255], valueStep: 1},
+                B: {value: 255, range: [0, 255], valueStep: 1},
+                A: {value: 255, range: [0, 255], valueStep: 1}
             }
         )
         renderLayerProperties(imageEditor)
@@ -420,11 +424,11 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             paintStroke,
             {
-                width: { value: 5, range: [0, 10], valueStep: 1 },
-                length: { value: 5, range: [0, 10], valueStep: 1 },
+                width: { value: 5, range: [1, 50], valueStep: 1 },
+                length: { value: 5, range: [1, 50], valueStep: 1 },
                 angle: {value: 45, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [2, 100], valueStep: 1},
-                edgeThreshold: {value: 100, range: [0, 200], valueStep: 1}
+                sampling: {value: 10, range: [5, 200], valueStep: 1},
+                edgeThreshold: {value: 100, range: [1, 200], valueStep: 1}
             }
         )
         renderLayerProperties(imageEditor)
