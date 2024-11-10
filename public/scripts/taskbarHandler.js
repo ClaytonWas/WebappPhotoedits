@@ -1,5 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
-import { paintedStylization, pointsInSpace, paintStroke, vectorsInSpace } from './plugins/paintedStylization.js'
+import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, prewireEdges, paintStroke } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -419,15 +419,39 @@ window.addEventListener('load', () => {
         imageEditor.renderImage()
     })
 
+    document.getElementById('sobelEdges').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            sobelEdges,
+            {
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+
+    document.getElementById('prewireEdges').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            prewireEdges,
+            {
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+
     document.getElementById('paintStroke').addEventListener('click', () => {
         imageEditor.layerManager.addLayerEffect(
             imageEditor.getSelectedIndex(),
             paintStroke,
             {
-                width: { value: 5, range: [1, 50], valueStep: 1 },
-                length: { value: 5, range: [1, 50], valueStep: 1 },
+                width: { value: 5, range: [1, 200], valueStep: 1 },
+                length: { value: 5, range: [1, 200], valueStep: 1 },
                 angle: {value: 45, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [5, 200], valueStep: 1},
+                sampling: {value: 10, range: [5, 10000], valueStep: 1},
                 edgeThreshold: {value: 100, range: [1, 200], valueStep: 1}
             }
         )

@@ -74,6 +74,135 @@ export function vectorsInSpace(image, parameters = {}) {
     return image.data
 }
 
+export function sobelEdges(image, parameters = {}) {
+    const referenceImageData = new Uint8ClampedArray(image.data)
+    const edgeThreshold = parameters.edgeThreshold ?? 100
+    
+    // Kernels
+    const sobelX = [-1, 0, 1,
+                    -2, 0, 2,
+                    -1, 0, 1]
+
+    const sobelY = [-1, -2, -1, 
+                     0, 0, 0,
+                     1, 2, 1]
+
+    // Set image to black rectangle.
+    for (let i = 0; i < image.data.length; i += 4) {
+        image.data[i] = 0
+        image.data[i + 1] = 0
+        image.data[i + 2] = 0
+        image.data[i + 3] = 255
+    }
+
+    // Process all pixels including edges
+    for (let y = 0; y < image.height; y++) {
+        for (let x = 0; x < image.width; x++) {
+            let gradientX = 0
+            let gradientY = 0
+
+            // Apply Sobel operator
+            for (let kernelY = -1; kernelY <= 1; kernelY++) {
+                for (let kernelX = -1; kernelX <= 1; kernelX++) {
+                    // Calculate neighbor pixel position
+                    const neighbourX = x + kernelX
+                    const neighbourY = y + kernelY
+
+                    // Logic to handle neighbour pixels not existing at image borders.
+                    const validX = Math.max(0, Math.min(image.width - 1, neighbourX))
+                    const validY = Math.max(0, Math.min(image.height - 1, neighbourY))
+
+                    let i = (validY * image.width + validX) * 4
+                    const pixelIntensity = (referenceImageData[i] + referenceImageData[i + 1] + referenceImageData[i + 2]) / 3
+                    const kernelIndex = (kernelY + 1) * 3 + (kernelX + 1)
+                    
+                    gradientX += pixelIntensity * sobelX[kernelIndex]
+                    gradientY += pixelIntensity * sobelY[kernelIndex]
+                }
+            }
+
+            // Calculate gradient magnitude.
+            // magnitude = √[(∂f/∂x)² + (∂f/∂y)²]
+            const magnitude = Math.sqrt(Math.pow(gradientX, 2) + Math.pow(gradientY, 2))
+            
+            // Draw white if the magnitude of intesntiy change in both directions is above the selected threshold.
+            let i = (y * image.width + x) * 4
+            if (magnitude > edgeThreshold) {
+                image.data[i] = 255
+                image.data[i + 1] = 255
+                image.data[i + 2] = 255
+            }
+        }
+    }
+
+    return image.data
+}
+
+export function prewireEdges(image, parameters = {}) {
+    const referenceImageData = new Uint8ClampedArray(image.data)
+    const edgeThreshold = parameters.edgeThreshold ?? 100
+    
+    // Kernels
+    const prewireX = [-1, 0, 1,
+                    -1, 0, 1,
+                    -1, 0, 1]
+
+    const prewireY = [1, 1, 1, 
+                     0, 0, 0,
+                     -1, -1, -1]
+
+    // Set image to black rectangle.
+    for (let i = 0; i < image.data.length; i += 4) {
+        image.data[i] = 0
+        image.data[i + 1] = 0
+        image.data[i + 2] = 0
+        image.data[i + 3] = 255
+    }
+
+    // Process all pixels including edges
+    for (let y = 0; y < image.height; y++) {
+        for (let x = 0; x < image.width; x++) {
+            let gradientX = 0
+            let gradientY = 0
+
+            // Apply Sobel operator
+            for (let kernelY = -1; kernelY <= 1; kernelY++) {
+                for (let kernelX = -1; kernelX <= 1; kernelX++) {
+                    // Calculate neighbor pixel position
+                    const neighbourX = x + kernelX
+                    const neighbourY = y + kernelY
+
+                    // Logic to handle neighbour pixels not existing at image borders.
+                    const validX = Math.max(0, Math.min(image.width - 1, neighbourX))
+                    const validY = Math.max(0, Math.min(image.height - 1, neighbourY))
+
+                    let i = (validY * image.width + validX) * 4
+                    const pixelIntensity = (referenceImageData[i] + referenceImageData[i + 1] + referenceImageData[i + 2]) / 3
+                    const kernelIndex = (kernelY + 1) * 3 + (kernelX + 1)
+                    
+                    gradientX += pixelIntensity * prewireX[kernelIndex]
+                    gradientY += pixelIntensity * prewireY[kernelIndex]
+                }
+            }
+
+            // Calculate gradient magnitude.
+            // magnitude = √[(∂f/∂x)² + (∂f/∂y)²]
+            const magnitude = Math.sqrt(Math.pow(gradientX, 2) + Math.pow(gradientY, 2))
+            
+            // Draw white if the magnitude of intesntiy change in both directions is above the selected threshold.
+            let i = (y * image.width + x) * 4
+            if (magnitude > edgeThreshold) {
+                image.data[i] = 255
+                image.data[i + 1] = 255
+                image.data[i + 2] = 255
+            }
+        }
+    }
+
+    return image.data
+}
+
+
 export function paintStroke(image, parameters = {}) {
     const strokeWidth = parameters.width ?? 5
     const strokeLength = parameters.length ?? 5
@@ -107,31 +236,34 @@ export function paintStroke(image, parameters = {}) {
             b: image.data[i + 2]
         }
 
-        // Draw the stroke
-        for (let currentLengthValueOfLine = 0; currentLengthValueOfLine < strokeLength; currentLengthValueOfLine += 0.5) {
-            for (let currentWidthValueOfLine = -strokeWidth/2; currentWidthValueOfLine < strokeWidth/2; currentWidthValueOfLine += 0.5) {
-                const vectorX = Math.floor(x + Math.cos(radians) * currentLengthValueOfLine + Math.cos(radians + Math.PI / 2) * currentWidthValueOfLine)
-                const vectorY = Math.floor(y + Math.sin(radians) * currentLengthValueOfLine + Math.sin(radians + Math.PI / 2) * currentWidthValueOfLine)
-                
-                const currentDrawIndex = (vectorY * image.width + vectorX) * 4
-                
-                // Skip if point is a future sample point
-                if (samplePoints.has(`${vectorX},${vectorY}`)) {
-                    continue
-                }
+        // Use labels to break both loops when edge is detected
+        strokeDrawing: {
+            for (let currentLengthValueOfLine = 0; currentLengthValueOfLine < strokeLength; currentLengthValueOfLine += 0.5) {
+                for (let currentWidthValueOfLine = -strokeWidth/2; currentWidthValueOfLine < strokeWidth/2; currentWidthValueOfLine += 0.5) {
+                    const currentPositionOfVectorX = Math.floor(x + Math.cos(radians) * currentLengthValueOfLine + Math.cos(radians + Math.PI / 2) * currentWidthValueOfLine)
+                    const currentPositionOfVectorY = Math.floor(y + Math.sin(radians) * currentLengthValueOfLine + Math.sin(radians + Math.PI / 2) * currentWidthValueOfLine)
+                    
+                    const currentDrawIndex = (currentPositionOfVectorY * image.width + currentPositionOfVectorX) * 4
+                    
+                    // Skip if point is a future sample point
+                    if (samplePoints.has(`${currentPositionOfVectorX},${currentPositionOfVectorY}`)) {
+                        continue
+                    }
 
-                // Check if we've hit an edge
-                const edgeIndex = vectorY * image.width + vectorX
-                if (edgeMap[edgeIndex] > edgeThreshold) {
-                    break
-                }
+                    // Check if we've hit an edge
+                    const edgeIndex = currentPositionOfVectorY * image.width + currentPositionOfVectorX
+                    if (edgeMap[edgeIndex] > edgeThreshold) {
+                        // Break out of both loops using label
+                        break strokeDrawing
+                    }
 
-                // Draw the pixel if in bounds
-                if (vectorX >= 0 && vectorX < image.width && vectorY >= 0 && currentDrawIndex < image.data.length - 2) {
-                    image.data[currentDrawIndex] = sourceColor.r
-                    image.data[currentDrawIndex + 1] = sourceColor.g
-                    image.data[currentDrawIndex + 2] = sourceColor.b
-                    image.data[currentDrawIndex + 3] = 255
+                    // Draw the pixel if in bounds
+                    if (currentPositionOfVectorX >= 0 && currentPositionOfVectorX < image.width && currentPositionOfVectorY >= 0 && currentDrawIndex < image.data.length - 2) {
+                        image.data[currentDrawIndex] = sourceColor.r
+                        image.data[currentDrawIndex + 1] = sourceColor.g
+                        image.data[currentDrawIndex + 2] = sourceColor.b
+                        image.data[currentDrawIndex + 3] = 255
+                    }
                 }
             }
         }
