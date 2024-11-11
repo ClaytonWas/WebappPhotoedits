@@ -1,5 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
-import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, prewireEdges } from './plugins/paintedStylization.js'
+import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, sobelEdgesColouredDirections, prewireEdges, prewireEdgesColouredDirections } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -431,11 +431,35 @@ window.addEventListener('load', () => {
         renderLayerProperties(imageEditor)
         imageEditor.renderImage()
     })
+    
+    document.getElementById('sobelEdgesColouredDirections').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            sobelEdgesColouredDirections,
+            {
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
 
     document.getElementById('prewireEdges').addEventListener('click', () => {
         imageEditor.layerManager.addLayerEffect(
             imageEditor.getSelectedIndex(),
             prewireEdges,
+            {
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+            }
+        )
+        renderLayerProperties(imageEditor)
+        imageEditor.renderImage()
+    })
+
+    document.getElementById('prewireEdgesColouredDirections').addEventListener('click', () => {
+        imageEditor.layerManager.addLayerEffect(
+            imageEditor.getSelectedIndex(),
+            prewireEdgesColouredDirections,
             {
                 edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
             }

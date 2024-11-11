@@ -46,14 +46,11 @@ body {
 
 .taskbarItem {
     z-index: 5;
-
     position: relative;
-
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-right: 20px;
+    padding: 10px 20px 10px 10px;
     margin-left: 5px;
     cursor: pointer;
+    color: white;
 }
 
 .taskbarItem:hover {
@@ -64,29 +61,24 @@ body {
     padding-right: 100px;
 }
 
-.taskbarItem:hover .taskbarItemDropdown {
-    display: block;
-}
-
 .taskbarItemDropdown {
     display: none;
     position: absolute;
-
     list-style-type: none;
-
     top: 38px;
+    left: 0;
     width: 100%;
-
     background-color: #2d2d2d;
+}
 
+.taskbarItem:hover > .taskbarItemDropdown {
+    display: block;
 }
 
 .taskbarItemDropdown li {
     position: relative;
-
     padding: 10px;
     cursor: pointer;
-
     color: white;
 }
 
@@ -94,26 +86,23 @@ body {
     background-color: #3d3d3d;
 }
 
-.taskbarItemDropdownContainsSubmenu:hover .taskbarItemDropdownIsSubmenu {
-    display: block;
-}
-
 .taskbarItemDropdownIsSubmenu {
     display: none;
     position: absolute;
-
     top: 0;
     left: 100%;
     width: 100%;
-
     background-color: #2d2d2d;
+    list-style-type: none;
+}
+
+.taskbarItemDropdownContainsSubmenu:hover > .taskbarItemDropdownIsSubmenu {
+    display: block;
 }
 
 .taskbarItemDropdownIsSubmenu li {
-    list-style-type: none;
-    cursor: pointer;
-
     color: white;
+    cursor: pointer;
 }
 
 .taskbarItemDropdownIsSubmenu li:hover {
