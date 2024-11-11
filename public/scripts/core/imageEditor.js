@@ -27,7 +27,7 @@ export class ImageEditor {
 
 
         
-        this.image = this.IMAGE                     // Used to resize images from from the original image dimensions while allow overwrites. 
+        this.image = this.IMAGE                     // Used to resize images from from the original image dimensions while allowing overwrites. 
         this.canvas = canvas
         this.context = canvas.getContext("2d")
 
@@ -41,6 +41,13 @@ export class ImageEditor {
     // loadImage loads a canvas with the original image data.
     loadImage() {
         this.context.drawImage(this.IMAGE, 0, 0)
+    }
+
+    //  resetImage() sets canvas and image to this.IMAGE
+    resetImage() {
+        this.image = this.IMAGE
+        this.canvas.width = this.IMAGE.width
+        this.canvas.height = this.IMAGE.height
     }
 
     quickExport() {
@@ -75,8 +82,6 @@ export class ImageEditor {
 
         tempCanvas.width = newWidth;
         tempCanvas.height = newHeight;
-
-        this.image = this.IMAGE
 
         //Currently this is doing lininterp.
         tempContext.drawImage(this.image, 0, 0, newWidth, newHeight); // Make a linear interpolation that works with this new data type.
@@ -144,5 +149,18 @@ export class ImageEditor {
         saturate(${saturate}%)
         brightness(${brightness}%)
         `
+    }
+
+    crop(originHeight, originWidth, endHeight, endWidth) {
+        let newHeight = Math.abs(endHeight - originHeight);
+        let newWidth = Math.abs(endWidth - originWidth);
+      
+        this.canvas.width = newWidth;
+        this.canvas.height = newHeight;
+      
+        this.context.drawImage(this.image, originWidth, originHeight, newWidth, newHeight, 0, 0, newWidth, newHeight);
+      
+        this.image = new Image();
+        this.image.src = this.canvas.toDataURL(this.TYPE)
     }
 }
