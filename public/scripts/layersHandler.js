@@ -153,9 +153,8 @@ function renderLayerProperties(imageEditor) {
 }
 
 window.addEventListener('imageEditorReady', (event) => {
-    let imageEditor = event.detail.instance;
-
-    let layersList_HTMLElement = document.getElementById('layersList')
+    const imageEditor = event.detail.instance
+    const layersList_HTMLElement = document.getElementById('layersList')
 
     // Clicks on layerDiv's to select layer.
     layersList_HTMLElement.addEventListener('click', (event) => {
@@ -173,39 +172,42 @@ window.addEventListener('imageEditorReady', (event) => {
 
     // Double clicks on layerDiv's to rename selected layer.
     layersList_HTMLElement.addEventListener('dblclick', (event) => {
-        var selectedLayerDivName = event.target.closest('.layerDivName')
-        if(selectedLayerDivName) {
-            const selectedLayerDiv = event.target.closest('.layerDiv')
-            if(selectedLayerDiv) {
-                const selectedLayerIndex = Array.from(selectedLayerDiv.parentNode.children).indexOf(selectedLayerDiv)
-                
-                // Dynamic creation of input.
-                if (!selectedLayerDivName.querySelector('input')) {
-                    const layerNameInput = document.createElement('input')
-                    layerNameInput.type = 'text'
-                    layerNameInput.name = 'newInput'
-                    layerNameInput.value = imageEditor.layerManager.layers[selectedLayerIndex].name
-                    selectedLayerDivName.textContent = ''
-                    selectedLayerDivName.appendChild(layerNameInput)
-                    
-                    // Bringing the new input to the users attention. Saves text in input field when unfocused.
-                    layerNameInput.focus()
-                    layerNameInput.addEventListener('blur', () => {
-                        const newLayerName = layerNameInput.value
-                        imageEditor.layerManager.layers[selectedLayerIndex].name = newLayerName
-                        renderLayersList(imageEditor)
-                        imageEditor.layerManager.selectedLayerIndex = selectedLayerIndex
-                        const layerDivs = document.querySelectorAll('.layerDiv')
-                        layerDivs[selectedLayerIndex].classList.add('selectedLayerDiv')
-                    })
-                    layerNameInput.addEventListener('keydown', (keypress) => {
-                        if (keypress.key === 'Enter') {
-                            layerNameInput.blur()
-                        }
-                    })
-                }
+        let selectedDivName = event.target.closest('.layerDivName')
+        if (!selectedDivName) return
+
+        const selectedDiv = event.target.closest('.layerDiv')
+        const selectedIndex = Array.from(selectedDiv.parentNode.children).indexOf(selectedDiv)
+        const currentName = selectedDivName.textContent
+
+        const nameInput = document.createElement('input')
+        nameInput.type = 'text'
+        nameInput.name = 'newInput'
+        nameInput.value = imageEditor.layerManager.layers[selectedIndex].name
+        selectedDivName.textContent = ''
+        selectedDivName.appendChild(nameInput)
+
+        // Bringing the new input to the users attention. Saves text in input field when unfocused.
+        nameInput.focus()
+        nameInput.addEventListener('blur', () => {
+            const newLayerName = nameInput.value
+            imageEditor.layerManager.layers[selectedIndex].name = newLayerName
+            renderLayersList(imageEditor)
+            imageEditor.setSelectedIndex(selectedIndex)
+            const layerDivs = document.querySelectorAll('.layerDiv')
+            layerDivs[selectedIndex].classList.add('selectedLayerDiv')
+        })
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nameInput.blur()
             }
-        }
+        })
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                nameInput.value = currentName
+                imageEditor.layerManager.layers[selectedIndex].name = currentName
+                nameInput.blur()
+            }
+        })
     })
 
     document.getElementById('addLayer').addEventListener('click', () => {
