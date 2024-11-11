@@ -180,28 +180,30 @@ window.addEventListener('imageEditorReady', (event) => {
                 const selectedLayerIndex = Array.from(selectedLayerDiv.parentNode.children).indexOf(selectedLayerDiv)
                 
                 // Dynamic creation of input.
-                const layerNameInput = document.createElement('input')
-                layerNameInput.type = 'text'
-                layerNameInput.name = 'newInput'
-                layerNameInput.value = imageEditor.layerManager.layers[selectedLayerIndex].name
-                selectedLayerDivName.textContent = ''
-                selectedLayerDivName.appendChild(layerNameInput)
-                
-                // Bringing the new input to the users attention. Saves text in input field when unfocused.
-                layerNameInput.focus()
-                layerNameInput.addEventListener('blur', () => {
-                    const newLayerName = layerNameInput.value
-                    imageEditor.layerManager.layers[selectedLayerIndex].name = newLayerName
-                    renderLayersList(imageEditor)
-                    imageEditor.layerManager.selectedLayerIndex = selectedLayerIndex
-                    const layerDivs = document.querySelectorAll('.layerDiv')
-                    layerDivs[selectedLayerIndex].classList.add('selectedLayerDiv')
-                })
-                layerNameInput.addEventListener('keydown', (keypress) => {
-                    if (keypress.key === 'Enter') {
-                        layerNameInput.blur()
-                    }
-                })
+                if (!selectedLayerDivName.querySelector('input')) {
+                    const layerNameInput = document.createElement('input')
+                    layerNameInput.type = 'text'
+                    layerNameInput.name = 'newInput'
+                    layerNameInput.value = imageEditor.layerManager.layers[selectedLayerIndex].name
+                    selectedLayerDivName.textContent = ''
+                    selectedLayerDivName.appendChild(layerNameInput)
+                    
+                    // Bringing the new input to the users attention. Saves text in input field when unfocused.
+                    layerNameInput.focus()
+                    layerNameInput.addEventListener('blur', () => {
+                        const newLayerName = layerNameInput.value
+                        imageEditor.layerManager.layers[selectedLayerIndex].name = newLayerName
+                        renderLayersList(imageEditor)
+                        imageEditor.layerManager.selectedLayerIndex = selectedLayerIndex
+                        const layerDivs = document.querySelectorAll('.layerDiv')
+                        layerDivs[selectedLayerIndex].classList.add('selectedLayerDiv')
+                    })
+                    layerNameInput.addEventListener('keydown', (keypress) => {
+                        if (keypress.key === 'Enter') {
+                            layerNameInput.blur()
+                        }
+                    })
+                }
             }
         }
     })
