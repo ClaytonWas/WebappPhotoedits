@@ -1,4 +1,6 @@
 import { ImageEditor } from './core/imageEditor.js';
+import { initializeModifiedImageDataModule } from './canvasHandler.js'
+import { renderLayerProperties } from './layersHandler.js'
 import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, sobelEdgesColouredDirections, prewireEdges, prewireEdgesColouredDirections } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
@@ -29,7 +31,8 @@ function resetEditor() {
     // Hide or reset any other UI modules
     closeResizeModule();
     closeHSVModule();
-    document.getElementById('hsvReset').click()
+    document.getElementById('hsvReset').click();
+    closeCropModule();
 }
 
 async function uploadImage() {
@@ -63,6 +66,14 @@ async function uploadImage() {
     reader.readAsDataURL(file);
 }
 
+function openCropModule() {
+    document.getElementById('cropModule').style.display = 'block'
+}
+
+function closeCropModule() {
+    document.getElementById('cropModule').style.display = 'none'
+}
+
 function openResizeModule() {
     document.getElementById('resizeModule').style.display = 'block'
 }
@@ -77,125 +88,6 @@ function openHSVModule() {
 
 function closeHSVModule() {
     document.getElementById('hsvModule').style.display = 'none'
-}
-
-function renderLayerProperties(imageEditor) {
-    let propertiesDiv = document.getElementById("currentLayerSelector")
-    let selectedLayerIndex = imageEditor.getSelectedIndex()
-
-    propertiesDiv.innerHTML = ''
-
-    if (!imageEditor.layerManager.layers[selectedLayerIndex]) {
-        return
-    } 
-    
-    let layer = imageEditor.layerManager.layers[selectedLayerIndex]
-
-    propertiesDiv.classList.add('layerPropertiesOpacity')
-    let opacityDiv = document.createElement("div")
-    let opacityP = document.createElement("p")
-    opacityP.textContent = 'Opacity'
-    
-    let opacitySlider = document.createElement("input")
-    opacitySlider.type = 'range'
-    opacitySlider.min = '0'
-    opacitySlider.max = '1'
-    opacitySlider.step = '0.01'
-    opacitySlider.value = layer.opacity
-
-    let opacityInput = document.createElement("input")
-    opacityInput.value = layer.opacity
-
-    opacityDiv.appendChild(opacityP)
-    opacityDiv.appendChild(opacitySlider)
-    opacityDiv.appendChild(opacityInput)
-    propertiesDiv.appendChild(opacityDiv)
-
-    // Layer displays parameters that are needed.
-    if (layer.effect && layer.effectParameters) {
-        Object.entries(layer.effectParameters).forEach(([parameterName, parameterConfig]) => {
-            let parameterDiv = document.createElement("div")
-            parameterDiv.classList.add('effectParameter')
-            let parameterP = document.createElement("p")
-            parameterP.textContent = parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
-
-            const { value: parameterValue, range = [0, 1], valueStep: stepValue} = parameterConfig
-            
-            let parameterSlider = document.createElement("input")
-            let parameterInput = document.createElement("input")
-
-            if (typeof parameterValue === 'number') {
-                parameterSlider.type = 'range'
-                parameterSlider.min = range[0]
-                parameterSlider.max = range[1]
-                parameterSlider.step = stepValue
-                parameterSlider.value = parameterValue
-
-                parameterInput.type = 'number'
-                parameterInput.min = range[0]
-                parameterInput.max = range[1]
-                parameterInput.step = stepValue
-                parameterInput.value = parameterValue
-
-                parameterSlider.addEventListener('mouseup', () => {
-                    parameterInput.value = parameterSlider.value
-                    layer.effectParameters[parameterName].value = parseFloat(parameterSlider.value)
-                    layer.setEffectParams(layer.effectParameters)
-                    imageEditor.renderImage()
-                })
-
-                parameterInput.addEventListener('change', () => {
-                    parameterSlider.value = parameterInput.value
-                    layer.effectParameters[parameterName].value = parseFloat(parameterInput.value)
-                    layer.setEffectParams(layer.effectParameters)
-                    imageEditor.renderImage()
-                })
-
-                parameterDiv.appendChild(parameterP)
-                parameterDiv.appendChild(parameterSlider)
-                parameterDiv.appendChild(parameterInput)
-            } else if (typeof parameterValue === 'boolean') {
-                parameterInput.type = 'checkbox'
-                parameterInput.checked = parameterValue
-
-                parameterInput.addEventListener('change', () => {
-                    layer.effectParameters[parameterName].value = parameterInput.checked
-                    layer.setEffectParams(layer.effectParameters)
-                    imageEditor.renderImage()
-                })
-
-                parameterDiv.appendChild(parameterP)
-                parameterDiv.appendChild(parameterInput)
-            } else {
-                parameterInput.type = 'text'
-                parameterInput.value = parameterValue
-
-                parameterInput.addEventListener('change', () => {
-                    layer.effectParameters[parameterName].value = parameterInput.value
-                    layer.setEffectParams(layer.effectParameters)
-                    imageEditor.renderImage()
-                })
-
-                parameterDiv.appendChild(parameterP)
-                parameterDiv.appendChild(parameterInput)
-            }
-
-            propertiesDiv.appendChild(parameterDiv)
-        })
-    }
-
-    opacitySlider.addEventListener('change', () => {
-        opacityInput.value = opacitySlider.value
-        layer.opacity = opacitySlider.value
-        imageEditor.renderImage()
-    })
-
-    opacityInput.addEventListener('change', () => {
-        opacityInput.value = Math.min(Math.max(parseFloat(opacityInput.value), 0), 1).toFixed(2)
-        opacitySlider.value = opacityInput.value
-        layer.opacity = opacitySlider.value
-        imageEditor.renderImage()
-    })
 }
 
 window.addEventListener('load', () => {
@@ -239,8 +131,8 @@ window.addEventListener('load', () => {
             resizeHeight.disabled = true
             resizeWidth.disabled = true
 
-            resizeHeight.value = imageEditor.IMAGE.height
-            resizeWidth.value = imageEditor.IMAGE.width
+            resizeHeight.value = imageEditor.image.height
+            resizeWidth.value = imageEditor.image.width
 
             scaleFactor.addEventListener('change', () => {
                 if (scaleFactor.value < 0.1) {
@@ -249,8 +141,8 @@ window.addEventListener('load', () => {
                     scaleFactor.value = 10
                 }
 
-                resizeHeight.value = Math.round(imageEditor.IMAGE.height * scaleFactor.value)
-                resizeWidth.value = Math.round(imageEditor.IMAGE.width * scaleFactor.value)
+                resizeHeight.value = Math.round(imageEditor.image.height * scaleFactor.value)
+                resizeWidth.value = Math.round(imageEditor.image.width * scaleFactor.value)
                 
             })
         } else {
@@ -272,6 +164,37 @@ window.addEventListener('load', () => {
 
         imageEditor.resizeCanvas(newHeight, newWidth, isConstrained, interpolationType)
         document.getElementById('hsvReset').click()
+
+        setTimeout(() => {
+            initializeModifiedImageDataModule(imageEditor);
+        }, 50);
+    })
+
+    document.getElementById('crop').addEventListener('click', () => {
+        openCropModule()
+    })
+
+    document.getElementById('cancelCrop').addEventListener('click', () => {
+        closeCropModule()
+    })
+
+    document.getElementById('cropSubmit').addEventListener('click', () => {
+        let startHeight = document.getElementById('cropStartHeight').value
+        let startWidth = document.getElementById('cropStartWidth').value
+
+        let endHeight = document.getElementById('cropEndHeight').value
+        let endWidth = document.getElementById('cropEndWidth').value
+
+        imageEditor.crop(startHeight, startWidth, endHeight, endWidth)
+        
+        setTimeout(() => {
+            initializeModifiedImageDataModule(imageEditor);
+        }, 50);
+    })
+
+    document.getElementById('resetImage').addEventListener('click', () => {
+        imageEditor.resetImage()
+        imageEditor.renderImage()
     })
 
     document.getElementById('hsv').addEventListener('click', () => {
@@ -287,7 +210,6 @@ window.addEventListener('load', () => {
     let brightnessSlider = document.getElementById('brightnessSlider')
     hueSlider.addEventListener('change', () => {
         if(!imageEditor) return
-        console.log(hueSlider.value)
         imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
         imageEditor.renderImage()
     })
@@ -305,14 +227,8 @@ window.addEventListener('load', () => {
         hueSlider.value = 0
         saturationSlider.value = 100
         brightnessSlider.value = 100
-        if(imageEditor) {
-            imageEditor.context.filter = `
-            hue-rotate(0deg)
-            saturate(100%)
-            brightness(100%)
-            `
-            imageEditor.renderImage()
-        }
+        if(!imageEditor) return
+        imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
     })
 
     document.getElementById('rotateImage').addEventListener('click', () => {

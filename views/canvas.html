@@ -22,14 +22,15 @@
                 <input id="uploadFile" type="file" accept="image/*" style="display: none;">
                 <li id="quickExport">Quick Export</li>
                 <li id="resize">Resize</li>
+                <li id="crop">Crop</li>
             </ul>
         </div>
 
         <div class="taskbarItem">
             <span>Edit</span>
             <ul class="taskbarItemDropdown">
-                <li>Undo</li>
-                <li>Redo</li>
+                <li>Undo (not working)</li>
+                <li>Redo (not working)</li>
             </ul>
         </div>
 
@@ -37,7 +38,7 @@
             <span>Image</span>
             <ul class="taskbarItemDropdown">
                 <li id="hsv">HSV Adjustment</li>
-                <li id="rotateImage">Rotate</li>
+                <li id="rotateImage">Rotate (not working)</li>
             </ul>
         </div>
 
@@ -78,6 +79,10 @@
                 </li>
             </ul>
         </div>
+
+        <div class="taskbarItem" id="resetImage">
+            <span>Reset Image</span>
+        </div>
     </div>
     <!-- /Taskbar -->
 
@@ -114,6 +119,34 @@
                 </div>
         </div>
         <button class="taskbarModuleSubmit" id="resizeSubmit">Resize</button>
+    </div>
+
+    <div class="cropModule" id="cropModule">
+        <div class="taskbarModuleTitle">
+                <p>Crop</p>
+                <button class="taskbarModuleClose" id="cancelCrop">x</button>
+        </div>
+        <div class="taskbarModuleContent">
+            <div class="taskbarModuleOneLine">
+                <p>Start Width</p>
+                <input type="number" type="text" placeholder="pixels" id="cropStartWidth">
+            </div>
+            <div class="taskbarModuleOneLine">
+                <p>Start Height</p>
+                <input type="number" type="text" placeholder="pixels" id="cropStartHeight">
+            </div>
+        </div>
+        <div class="taskbarModuleContent">
+                <div class="taskbarModuleOneLine">
+                    <p>End Width</p>
+                    <input type="number" type="text" placeholder="pixels" id="cropEndWidth">
+                </div>
+                <div class="taskbarModuleOneLine">
+                    <p>End Height</p>
+                    <input type="number" type="text" placeholder="pixels" id="cropEndHeight">
+                </div>
+        </div>
+        <button class="taskbarModuleSubmit" id="cropSubmit">Crop</button>
     </div>
 
     <div class="hsvModule" id="hsvModule">
@@ -154,6 +187,9 @@
                 <!-- Image Data Module -->
                 <div class="imageDataModule">
                     <div class="imageDataModuleSection">
+                        <p>Original Image Data</p>
+                    </div>
+                    <div class="imageDataModuleSection">
                         <p class="sectionLabel" id="titleName"></p>
                         <p class="sectionValue" id="imageName"></p>
                     </div>
@@ -167,6 +203,25 @@
                     </div>
                 </div>
                 <!-- /Image Data Module -->
+                <!-- Modified Image Data Module -->
+                <div class="imageDataModule">
+                    <div class="imageDataModuleSection">
+                        <p>Current Image Data</p>
+                    </div>
+                    <div class="imageDataModuleSection">
+                        <p class="sectionLabel" id="titleNameModified"></p>
+                        <p class="sectionValue" id="imageNameModified"></p>
+                    </div>
+                    <div class="imageDataModuleSection">
+                        <p class="sectionLabel" id="titleDimensionsModified"></p>
+                        <p class="sectionValue" id="imageDimensionsModified"></p>
+                    </div>
+                    <div class="imageDataModuleSection">
+                        <p class="sectionLabel" id="titleExtensionModified"></p>
+                        <p class="sectionValue" id="imageExtensionModified"></p>
+                    </div>
+                </div>
+                <!-- /Modified Image Data Module -->
             </div>
             <!-- /Modules That Provide Image Context And Data -->
         </div>

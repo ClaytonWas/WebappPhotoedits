@@ -33,7 +33,7 @@ function renderLayersList(imageEditor) {
     imageEditor.layerManager.selectedLayerIndex = null
 }
 
-function renderLayerProperties(imageEditor) {
+export function renderLayerProperties(imageEditor) {
     let propertiesDiv = document.getElementById("currentLayerSelector")
     let selectedLayerIndex = imageEditor.getSelectedIndex()
 

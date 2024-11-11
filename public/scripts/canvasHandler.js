@@ -11,10 +11,22 @@ function initializeOriginalImageDataModule(imageEditor) {
     document.getElementById('imageExtension').textContent = `.${imageEditor.EXTENSION}`
 }
 
+export function initializeModifiedImageDataModule(imageEditor) {
+    document.getElementById('titleNameModified').textContent = 'Name:'
+    document.getElementById('imageNameModified').textContent = imageEditor.NAME
+
+    document.getElementById('titleDimensionsModified').textContent = 'Dimensions:'
+    document.getElementById('imageDimensionsModified').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
+
+    document.getElementById('titleExtensionModified').textContent = 'Extension:'
+    document.getElementById('imageExtensionModified').textContent = `.${imageEditor.EXTENSION}`
+}
+
 window.addEventListener('imageEditorReady', (event) => {
     let imageEditor = event.detail.instance;
     imageEditor.loadImage()                         // Render
     initializeOriginalImageDataModule(imageEditor)  // Initializing Modules Begins
+    initializeModifiedImageDataModule(imageEditor)
     // Initializing Modules Ends
 
 
