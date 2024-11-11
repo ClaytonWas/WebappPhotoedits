@@ -194,6 +194,9 @@ window.addEventListener('load', () => {
 
     document.getElementById('resetImage').addEventListener('click', () => {
         imageEditor.resetImage()
+        setTimeout(() => {
+            initializeModifiedImageDataModule(imageEditor);
+        }, 50);
         imageEditor.renderImage()
     })
 
