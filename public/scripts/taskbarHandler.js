@@ -286,37 +286,20 @@ window.addEventListener('load', () => {
     let saturationSlider = document.getElementById('saturationSlider')
     let brightnessSlider = document.getElementById('brightnessSlider')
     hueSlider.addEventListener('change', () => {
+        if(!imageEditor) return
         console.log(hueSlider.value)
-        if(imageEditor) {
-            imageEditor.context.filter = `
-            hue-rotate(${hueSlider.value}deg)
-            saturate(${saturationSlider.value}%)
-            brightness(${brightnessSlider.value}%)
-            `
-            imageEditor.renderImage()
-        }
+        imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
+        imageEditor.renderImage()
     })
     saturationSlider.addEventListener('change', () => {
-        console.log(saturationSlider.value)
-        if(imageEditor) {
-            imageEditor.context.filter = `
-            hue-rotate(${hueSlider.value}deg)
-            saturate(${saturationSlider.value}%)
-            brightness(${brightnessSlider.value}%)
-            `
-            imageEditor.renderImage()
-        }
+        if(!imageEditor) return
+        imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
+        imageEditor.renderImage()
     })
     brightnessSlider.addEventListener('change', () => {
-        console.log(brightnessSlider.value)
-        if(imageEditor) {
-            imageEditor.context.filter = `
-            hue-rotate(${hueSlider.value}deg)
-            saturate(${saturationSlider.value}%)
-            brightness(${brightnessSlider.value}%)
-            `
-            imageEditor.renderImage()
-        }
+        if(!imageEditor) return
+        imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
+        imageEditor.renderImage()
     })
     document.getElementById('hsvReset').addEventListener('click', () => {
         hueSlider.value = 0

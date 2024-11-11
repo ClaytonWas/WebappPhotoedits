@@ -137,4 +137,12 @@ export class ImageEditor {
     getSelectedIndex() {
         return this.layerManager.selectedLayerIndex
     }
+
+    changeCanvasHSV(hue, saturate, brightness) {
+        this.context.filter = `
+        hue-rotate(${hue}deg)
+        saturate(${saturate}%)
+        brightness(${brightness}%)
+        `
+    }
 }
