@@ -1,5 +1,5 @@
 import { ImageEditor } from './core/imageEditor.js';
-import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, prewireEdges, paintStroke } from './plugins/paintedStylization.js'
+import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, prewireEdges } from './plugins/paintedStylization.js'
 import { filmEffects } from './plugins/filmEffects.js';
 import { greyscale } from './plugins/greyscale.js';
 import { sepia } from './plugins/sepia.js';
@@ -376,10 +376,11 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             paintedStylization,
             {
-                width: { value: 5, range: [0, 100], valueStep: 1 },
-                length: { value: 5, range: [0, 100], valueStep: 1 },
-                angle: {value: 45, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [2, 100], valueStep: 1}
+                width: { value: 5, range: [1, 200], valueStep: 1 },
+                length: { value: 5, range: [1, 200], valueStep: 1 },
+                angle: {value: 145, range: [0, 360], valueStep: 1 },
+                sampling: {value: 10, range: [5, 10000], valueStep: 1},
+                edgeThreshold: {value: 100, range: [1, 200], valueStep: 1}
             }
         )
         renderLayerProperties(imageEditor)
@@ -407,7 +408,7 @@ window.addEventListener('load', () => {
             {
                 width: { value: 1, range: [1, 500], valueStep: 1 },
                 length: { value: 3, range: [1, 1000], valueStep: 1 },
-                angle: {value: 90, range: [0, 360], valueStep: 1 },
+                angle: {value: 0, range: [0, 360], valueStep: 1 },
                 sampling: {value: 10, range: [2, 1000000], valueStep: 1},
                 R: {value: 255, range: [0, 255], valueStep: 1},
                 G: {value: 255, range: [0, 255], valueStep: 1},
@@ -442,21 +443,4 @@ window.addEventListener('load', () => {
         renderLayerProperties(imageEditor)
         imageEditor.renderImage()
     })
-
-    document.getElementById('paintStroke').addEventListener('click', () => {
-        imageEditor.layerManager.addLayerEffect(
-            imageEditor.getSelectedIndex(),
-            paintStroke,
-            {
-                width: { value: 5, range: [1, 200], valueStep: 1 },
-                length: { value: 5, range: [1, 200], valueStep: 1 },
-                angle: {value: 45, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [5, 10000], valueStep: 1},
-                edgeThreshold: {value: 100, range: [1, 200], valueStep: 1}
-            }
-        )
-        renderLayerProperties(imageEditor)
-        imageEditor.renderImage()
-    })
-    
 })
