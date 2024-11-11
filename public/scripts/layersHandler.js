@@ -158,6 +158,9 @@ window.addEventListener('imageEditorReady', (event) => {
 
     // Clicks on layerDiv's to select layer.
     layersList_HTMLElement.addEventListener('click', (event) => {
+        // Stop event from bubbling up
+        event.stopPropagation()
+        
         const selectedLayer_HTMLDiv = event.target.closest('.layerDiv')
         if(selectedLayer_HTMLDiv) {
             const layerDivs = document.querySelectorAll('.layerDiv')
@@ -172,6 +175,9 @@ window.addEventListener('imageEditorReady', (event) => {
 
     // Double clicks on layerDiv's to rename selected layer.
     layersList_HTMLElement.addEventListener('dblclick', (event) => {
+        // Stop event from bubbling up
+        event.stopPropagation()
+        
         let selectedDivName = event.target.closest('.layerDivName')
         if (!selectedDivName) return
 
@@ -186,7 +192,6 @@ window.addEventListener('imageEditorReady', (event) => {
         selectedDivName.textContent = ''
         selectedDivName.appendChild(nameInput)
 
-        // Bringing the new input to the users attention. Saves text in input field when unfocused.
         nameInput.focus()
         nameInput.addEventListener('blur', () => {
             const newLayerName = nameInput.value
@@ -195,12 +200,14 @@ window.addEventListener('imageEditorReady', (event) => {
             imageEditor.setSelectedIndex(selectedIndex)
             const layerDivs = document.querySelectorAll('.layerDiv')
             layerDivs[selectedIndex].classList.add('selectedLayerDiv')
-        })
+        }, { once: true }) // Add once: true to prevent multiple listeners
+
         nameInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
                 nameInput.blur()
             }
         })
+
         nameInput.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 nameInput.value = currentName

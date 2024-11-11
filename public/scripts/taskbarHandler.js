@@ -376,11 +376,11 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             paintedStylization,
             {
-                width: { value: 5, range: [1, 200], valueStep: 1 },
-                length: { value: 5, range: [1, 200], valueStep: 1 },
+                width: { value: 5, range: [1, 500], valueStep: 1 },
+                length: { value: 5, range: [1, 1000], valueStep: 1 },
                 angle: {value: 145, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [5, 10000], valueStep: 1},
-                edgeThreshold: {value: 100, range: [1, 200], valueStep: 1}
+                sampling: {value: 10, range: [5, 1000000], valueStep: 1},
+                edgeThreshold: {value: 100, range: [1, 255], valueStep: 1}
             }
         )
         renderLayerProperties(imageEditor)

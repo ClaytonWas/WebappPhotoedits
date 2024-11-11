@@ -32,7 +32,7 @@ export function paintedStylization(image, parameters = {}) {
 
         strokeDrawing: {
             for (let currentLengthValueOfLine = 0; currentLengthValueOfLine < strokeLength; currentLengthValueOfLine += 0.5) {
-                for (let currentWidthValueOfLine = -strokeWidth / 2; currentWidthValueOfLine < currentWidthValueOfLine / 2; currentWidthValueOfLine += 0.5) {
+                for (let currentWidthValueOfLine = -strokeWidth / 2; currentWidthValueOfLine < strokeWidth / 2; currentWidthValueOfLine += 0.5) {
                     const vectorX = Math.floor(x + Math.cos(radians) * currentLengthValueOfLine + Math.cos(radians + Math.PI / 2) * currentWidthValueOfLine)
                     const vectorY = Math.floor(y + Math.sin(radians) * currentLengthValueOfLine + Math.sin(radians + Math.PI / 2) * currentWidthValueOfLine)
                     
