@@ -9,6 +9,63 @@ import { sepia } from './plugins/sepia.js';
 
 let imageEditor = null
 
+function enableSelection(callback) {
+    const canvas = document.getElementById('imageCanvas');
+    let isSelecting = false;
+    let startX, startY, endX, endY;
+
+    function getCanvasCoordinates(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
+        };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
+        startX = x;
+        startY = y;
+        isSelecting = true;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isSelecting) return;
+
+        const context = canvas.getContext("2d");
+        const originalImageData = imageEditor.context.getImageData(0, 0, canvas.width, canvas.height);
+        context.putImageData(originalImageData, 0, 0);
+
+        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
+        endX = x;
+        endY = y;
+
+        context.strokeStyle = 'white';
+        context.lineWidth = 2;
+        context.setLineDash([5, 5]);
+        context.strokeRect(startX, startY, endX - startX, endY - startY);
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isSelecting = false;
+
+        // Return selection coordinates via callback
+        const selection = {
+            startHeight: Math.round(startY),
+            startWidth: Math.round(startX),
+            endHeight: Math.round(endY),
+            endWidth: Math.round(endX)
+        };
+
+        if (typeof callback === 'function') {
+            callback(selection);
+        }
+    });
+}
+
 function resetEditor() {
     if (imageEditor) {
         imageEditor = null;
@@ -170,6 +227,26 @@ window.addEventListener('load', () => {
         }, 50);
     })
 
+    document.getElementById('cursorCrop').addEventListener('click', () => {
+        // Disable dragging of the image canvas wrapper
+        let isCropping = true
+        const imageCanvasDiv = document.getElementById('imageCanvasDiv')
+        imageCanvasDiv.style.cursor = 'default'
+        
+        enableSelection((selection) => {
+            // Re-enable the draggable cursor once the selection is done
+            imageCanvasDiv.style.cursor = 'grab'
+            isCropping = false
+
+            document.getElementById('cropStartHeight').value = selection.startHeight
+            document.getElementById('cropStartWidth').value = selection.startWidth
+            document.getElementById('cropEndHeight').value = selection.endHeight
+            document.getElementById('cropEndWidth').value = selection.endWidth
+    
+            openCropModule()
+        })
+    })
+
     document.getElementById('crop').addEventListener('click', () => {
         openCropModule()
     })
@@ -179,11 +256,10 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('cropSubmit').addEventListener('click', () => {
-        let startHeight = document.getElementById('cropStartHeight').value
-        let startWidth = document.getElementById('cropStartWidth').value
-
-        let endHeight = document.getElementById('cropEndHeight').value
-        let endWidth = document.getElementById('cropEndWidth').value
+        const startHeight = parseInt(document.getElementById('cropStartHeight').value);
+        const startWidth = parseInt(document.getElementById('cropStartWidth').value);
+        const endHeight = parseInt(document.getElementById('cropEndHeight').value);
+        const endWidth = parseInt(document.getElementById('cropEndWidth').value);
 
         imageEditor.crop(startHeight, startWidth, endHeight, endWidth)
         
@@ -236,10 +312,20 @@ window.addEventListener('load', () => {
 
     document.getElementById('rotateCW90').addEventListener('click', () => {
         imageEditor.rotate(90)
+        document.getElementById('hsvReset').click();
+
+        setTimeout(() => {
+            initializeModifiedImageDataModule(imageEditor);
+        }, 50);
     })
 
     document.getElementById('rotateCCW90').addEventListener('click', () => {
         imageEditor.rotate(-90)
+        document.getElementById('hsvReset').click();
+
+        setTimeout(() => {
+            initializeModifiedImageDataModule(imageEditor);
+        }, 50);
     })
 
 

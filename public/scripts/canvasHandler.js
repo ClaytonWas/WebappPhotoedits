@@ -36,6 +36,7 @@ window.addEventListener('imageEditorReady', (event) => {
     const context = imageEditor.context
 
     let isPanning = false
+    let isCropping = false
     let startPoint = { x: 0, y: 0 }
     let currentTranslate = { x: 0, y: 0 }
     let scale = 1
@@ -45,6 +46,7 @@ window.addEventListener('imageEditorReady', (event) => {
     }
 
     viewingModule.addEventListener('mousedown', (event) => {
+        if (isCropping) return
         isPanning = true
 
         startPoint = {
@@ -56,7 +58,7 @@ window.addEventListener('imageEditorReady', (event) => {
     })
   
     viewingModule.addEventListener('mousemove', (event) => {
-        if (!isPanning) return;
+        if (isCropping || !isPanning) return
         
         currentTranslate = {
             x: event.clientX - startPoint.x,
@@ -67,17 +69,20 @@ window.addEventListener('imageEditorReady', (event) => {
     })
   
     viewingModule.addEventListener('mouseup', () => {
+        if (isCropping) return
         isPanning = false
         viewingModule.style.cursor = 'grab'
     })
   
     viewingModule.addEventListener('mouseleave', () => {
+        if (isCropping) return
         isPanning = false
         viewingModule.style.cursor = 'grab'
     })
   
     // Zoom functionality
     viewingModule.addEventListener('wheel', (event) => {
+        if (isCropping) return
         event.preventDefault()
         
         const rect = viewingModule.getBoundingClientRect()
