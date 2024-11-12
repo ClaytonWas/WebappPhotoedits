@@ -236,8 +236,8 @@ window.addEventListener('load', () => {
         document.getElementById('hsvReset').click()
 
         setTimeout(() => {
-            initializeModifiedImageDataModule(imageEditor);
-        }, 50);
+            initializeModifiedImageDataModule(imageEditor)
+        }, 50)
     })
 
     document.getElementById('cursorCrop').addEventListener('click', () => {
@@ -295,8 +295,8 @@ window.addEventListener('load', () => {
         imageEditor.renderImage()
 
         setTimeout(() => {
-            initializeModifiedImageDataModule(imageEditor);
-        }, 50);
+            initializeModifiedImageDataModule(imageEditor)
+        }, 50)
     })
 
     document.getElementById('resetImage').addEventListener('click', () => {
@@ -347,7 +347,7 @@ window.addEventListener('load', () => {
 
         setTimeout(() => {
             initializeModifiedImageDataModule(imageEditor);
-        }, 50);
+        }, 50)
     })
 
     document.getElementById('rotateCCW90').addEventListener('click', () => {
@@ -356,7 +356,7 @@ window.addEventListener('load', () => {
 
         setTimeout(() => {
             initializeModifiedImageDataModule(imageEditor);
-        }, 50);
+        }, 50)
     })
 
 
