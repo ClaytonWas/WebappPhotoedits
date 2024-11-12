@@ -251,10 +251,26 @@ window.addEventListener('load', () => {
             imageCanvasDiv.style.cursor = 'grab'
             window.isCropping = false
 
-            document.getElementById('cropStartHeight').value = selection.startHeight
-            document.getElementById('cropStartWidth').value = selection.startWidth
-            document.getElementById('cropEndHeight').value = selection.endHeight
-            document.getElementById('cropEndWidth').value = selection.endWidth
+            let startHeight = selection.startHeight
+            let startWidth = selection.startWidth
+            let endHeight = selection.endHeight
+            let endWidth = selection.endWidth
+
+            if(startHeight > endHeight) {
+                let temp = startHeight
+                startHeight = endHeight
+                endHeight = temp
+            }
+            if(startWidth > endWidth) {
+                let temp = startWidth
+                startWidth = endWidth
+                endWidth = temp
+            }
+            
+            document.getElementById('cropStartHeight').value = startHeight
+            document.getElementById('cropStartWidth').value = startWidth
+            document.getElementById('cropEndHeight').value = endHeight
+            document.getElementById('cropEndWidth').value = endWidth
     
             openCropModule()
             disableSelection()
@@ -270,10 +286,10 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('cropSubmit').addEventListener('click', () => {
-        const startHeight = parseInt(document.getElementById('cropStartHeight').value);
-        const startWidth = parseInt(document.getElementById('cropStartWidth').value);
-        const endHeight = parseInt(document.getElementById('cropEndHeight').value);
-        const endWidth = parseInt(document.getElementById('cropEndWidth').value);
+        let startHeight = parseInt(document.getElementById('cropStartHeight').value);
+        let startWidth = parseInt(document.getElementById('cropStartWidth').value);
+        let endHeight = parseInt(document.getElementById('cropEndHeight').value);
+        let endWidth = parseInt(document.getElementById('cropEndWidth').value);
 
         imageEditor.crop(startHeight, startWidth, endHeight, endWidth)
         imageEditor.renderImage()
