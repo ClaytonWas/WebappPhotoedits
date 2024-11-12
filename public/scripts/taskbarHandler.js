@@ -10,14 +10,14 @@ import { sepia } from './plugins/sepia.js';
 let imageEditor = null
 
 function enableSelection(callback) {
-    const canvas = document.getElementById('imageCanvas')
-    let isSelecting = false
-    let startX, startY, endX, endY
+    const canvas = document.getElementById('imageCanvas');
+    let isSelecting = false;
+    let startX, startY, endX, endY;
 
     function getCanvasCoordinates(clientX, clientY) {
-        const rect = canvas.getBoundingClientRect()
-        const scaleX = canvas.width / rect.width
-        const scaleY = canvas.height / rect.height
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
 
         return {
             x: (clientX - rect.left) * scaleX,
@@ -25,31 +25,32 @@ function enableSelection(callback) {
         };
     }
 
-    canvas.addEventListener('mousedown', (e) => {
+    // Store event listener functions in named variables
+    const handleMouseDown = (e) => {
         const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
-        startX = x
-        startY = y
-        isSelecting = true
-    })
+        startX = x;
+        startY = y;
+        isSelecting = true;
+    };
 
-    canvas.addEventListener('mousemove', (e) => {
-        if (!isSelecting) return
+    const handleMouseMove = (e) => {
+        if (!isSelecting) return;
 
-        const context = canvas.getContext("2d")
-        const originalImageData = imageEditor.context.getImageData(0, 0, canvas.width, canvas.height)
+        const context = canvas.getContext("2d");
+        const originalImageData = imageEditor.context.getImageData(0, 0, canvas.width, canvas.height);
         context.putImageData(originalImageData, 0, 0);
 
-        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY)
-        endX = x
-        endY = y
+        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
+        endX = x;
+        endY = y;
 
-        context.strokeStyle = 'white'
-        context.lineWidth = 10
-        context.setLineDash([5, 5])
-        context.strokeRect(startX, startY, endX - startX, endY - startY)
-    })
+        context.strokeStyle = 'white';
+        context.lineWidth = 10;
+        context.setLineDash([5, 5]);
+        context.strokeRect(startX, startY, endX - startX, endY - startY);
+    };
 
-    canvas.addEventListener('mouseup', () => {
+    const handleMouseUp = () => {
         isSelecting = false;
 
         // Return selection coordinates via callback
@@ -58,12 +59,24 @@ function enableSelection(callback) {
             startWidth: Math.round(startX),
             endHeight: Math.round(endY),
             endWidth: Math.round(endX)
-        }
+        };
 
         if (typeof callback === 'function') {
             callback(selection);
         }
-    })
+    };
+
+    // Add event listeners
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseup', handleMouseUp);
+
+    // Return a cleanup function
+    return function disableSelection() {
+        canvas.removeEventListener('mousedown', handleMouseDown);
+        canvas.removeEventListener('mousemove', handleMouseMove);
+        canvas.removeEventListener('mouseup', handleMouseUp);
+    };
 }
 
 function resetEditor() {
@@ -228,12 +241,12 @@ window.addEventListener('load', () => {
     })
 
     document.getElementById('cursorCrop').addEventListener('click', () => {
-        // Disable dragging of the image canvas wrapper
-        let isCropping = true
+        window.isCropping = true    // Disable dragging in canvasHandler.js if cropping
+
         const imageCanvasDiv = document.getElementById('imageCanvasDiv')
         imageCanvasDiv.style.cursor = 'default'
         
-        enableSelection((selection) => {
+        const disableSelection = enableSelection((selection) => {
             // Re-enable the draggable cursor once the selection is done
             imageCanvasDiv.style.cursor = 'grab'
             isCropping = false
@@ -244,7 +257,7 @@ window.addEventListener('load', () => {
             document.getElementById('cropEndWidth').value = selection.endWidth
     
             openCropModule()
-            imageEditor.renderImage()
+            disableSelection()
         })
     })
 
