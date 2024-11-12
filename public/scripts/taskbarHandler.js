@@ -249,7 +249,7 @@ window.addEventListener('load', () => {
         const disableSelection = enableSelection((selection) => {
             // Re-enable the draggable cursor once the selection is done
             imageCanvasDiv.style.cursor = 'grab'
-            isCropping = false
+            window.isCropping = false
 
             document.getElementById('cropStartHeight').value = selection.startHeight
             document.getElementById('cropStartWidth').value = selection.startWidth
@@ -276,7 +276,8 @@ window.addEventListener('load', () => {
         const endWidth = parseInt(document.getElementById('cropEndWidth').value);
 
         imageEditor.crop(startHeight, startWidth, endHeight, endWidth)
-        
+        imageEditor.renderImage()
+
         setTimeout(() => {
             initializeModifiedImageDataModule(imageEditor);
         }, 50);
