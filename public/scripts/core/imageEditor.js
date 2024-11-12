@@ -163,4 +163,49 @@ export class ImageEditor {
         this.image = new Image();
         this.image.src = this.canvas.toDataURL(this.TYPE)
     }
+
+    rotate(angle) {
+        const tempCanvas = document.createElement('canvas')
+        const tempContext = tempCanvas.getContext('2d')
+        const radians = (angle * Math.PI) / 180
+        
+        // If rotating by 90 or 270 degrees, swap width and height
+        const isRightAngle = angle % 90 === 0;
+        const swap = (angle % 180 !== 0) && isRightAngle;
+        
+        const newWidth = swap ? this.canvas.height : this.canvas.width;
+        const newHeight = swap ? this.canvas.width : this.canvas.height;
+        
+        tempCanvas.width = newWidth;
+        tempCanvas.height = newHeight;
+        tempContext.translate(newWidth / 2, newHeight / 2);
+        tempContext.rotate(radians);
+        
+        const newOriginX = -this.canvas.width / 2;
+        const newOriginY = -this.canvas.height / 2;
+        tempContext.drawImage(this.image, newOriginX, newOriginY);
+        
+        const rotatedImage = new Image();
+        rotatedImage.src = tempCanvas.toDataURL(this.TYPE);
+        
+        // On image load update the this.image
+        return new Promise((resolve) => {
+            rotatedImage.onload = () => {
+                this.canvas.width = newWidth
+                this.canvas.height = newHeight
+                this.image = rotatedImage
+            
+                // Clear and draw the rotated image
+                this.context.clearRect(0, 0, newWidth, newHeight)
+                this.context.drawImage(rotatedImage, 0, 0)
+                
+                // Render any layer effects
+                this.renderImage()
+                
+                // Clean up
+                tempCanvas.remove()
+                resolve()
+            }
+        })
+    }
 }

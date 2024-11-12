@@ -234,9 +234,12 @@ window.addEventListener('load', () => {
         imageEditor.changeCanvasHSV(hueSlider.value, saturationSlider.value, brightnessSlider.value)
     })
 
-    document.getElementById('rotateImage').addEventListener('click', () => {
-        // Implement this soon!
-        console.log('Rotate Image!')
+    document.getElementById('rotateCW90').addEventListener('click', () => {
+        imageEditor.rotate(90)
+    })
+
+    document.getElementById('rotateCCW90').addEventListener('click', () => {
+        imageEditor.rotate(-90)
     })
 
 
