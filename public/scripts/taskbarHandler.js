@@ -1,57 +1,57 @@
-import { ImageEditor } from './core/imageEditor.js';
+import { ImageEditor } from './core/imageEditor.js'
 import { initializeModifiedImageDataModule } from './canvasHandler.js'
 import { renderLayerProperties } from './layersHandler.js'
 import { paintedStylization, pointsInSpace, vectorsInSpace, sobelEdges, sobelEdgesColouredDirections, prewireEdges, prewireEdgesColouredDirections } from './plugins/paintedStylization.js'
-import { filmEffects } from './plugins/filmEffects.js';
-import { greyscale } from './plugins/greyscale.js';
-import { sepia } from './plugins/sepia.js';
+import { filmEffects } from './plugins/filmEffects.js'
+import { greyscale } from './plugins/greyscale.js'
+import { sepia } from './plugins/sepia.js'
 
 
 let imageEditor = null
 
 function enableSelection(callback) {
-    const canvas = document.getElementById('imageCanvas');
-    let isSelecting = false;
-    let startX, startY, endX, endY;
+    const canvas = document.getElementById('imageCanvas')
+    let isSelecting = false
+    let startX, startY, endX, endY
 
     function getCanvasCoordinates(clientX, clientY) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+        const rect = canvas.getBoundingClientRect()
+        const scaleX = canvas.width / rect.width
+        const scaleY = canvas.height / rect.height
 
         return {
             x: (clientX - rect.left) * scaleX,
             y: (clientY - rect.top) * scaleY
-        };
+        }
     }
 
     // Store event listener functions in named variables
     const handleMouseDown = (e) => {
-        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
-        startX = x;
-        startY = y;
-        isSelecting = true;
-    };
+        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY)
+        startX = x
+        startY = y
+        isSelecting = true
+    }
 
     const handleMouseMove = (e) => {
-        if (!isSelecting) return;
+        if (!isSelecting) return
 
-        const context = canvas.getContext("2d");
-        const originalImageData = imageEditor.context.getImageData(0, 0, canvas.width, canvas.height);
-        context.putImageData(originalImageData, 0, 0);
+        const context = canvas.getContext("2d")
+        const originalImageData = imageEditor.context.getImageData(0, 0, canvas.width, canvas.height)
+        context.putImageData(originalImageData, 0, 0)
 
-        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY);
-        endX = x;
-        endY = y;
+        const { x, y } = getCanvasCoordinates(e.clientX, e.clientY)
+        endX = x
+        endY = y
 
-        context.strokeStyle = 'white';
-        context.lineWidth = 10;
-        context.setLineDash([5, 5]);
-        context.strokeRect(startX, startY, endX - startX, endY - startY);
-    };
+        context.strokeStyle = 'white'
+        context.lineWidth = 10
+        context.setLineDash([5, 5])
+        context.strokeRect(startX, startY, endX - startX, endY - startY)
+    }
 
     const handleMouseUp = () => {
-        isSelecting = false;
+        isSelecting = false
 
         // Return selection coordinates via callback
         const selection = {
@@ -67,73 +67,73 @@ function enableSelection(callback) {
     };
 
     // Add event listeners
-    canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mousedown', handleMouseDown)
+    canvas.addEventListener('mousemove', handleMouseMove)
+    canvas.addEventListener('mouseup', handleMouseUp)
 
     // Return a cleanup function
     return function disableSelection() {
-        canvas.removeEventListener('mousedown', handleMouseDown);
-        canvas.removeEventListener('mousemove', handleMouseMove);
-        canvas.removeEventListener('mouseup', handleMouseUp);
+        canvas.removeEventListener('mousedown', handleMouseDown)
+        canvas.removeEventListener('mousemove', handleMouseMove)
+        canvas.removeEventListener('mouseup', handleMouseUp)
     };
 }
 
 function resetEditor() {
     if (imageEditor) {
-        imageEditor = null;
+        imageEditor = null
     }
 
     // Reset UI elements related to the image data
-    document.getElementById('titleName').textContent = '';
-    document.getElementById('imageName').textContent = '';
-    document.getElementById('titleDimensions').textContent = '';
-    document.getElementById('imageDimensions').textContent = '';
-    document.getElementById('titleExtension').textContent = '';
-    document.getElementById('imageExtension').textContent = '';
-    document.getElementById("currentLayerSelector").innerHTML = '';
+    document.getElementById('titleName').textContent = ''
+    document.getElementById('imageName').textContent = ''
+    document.getElementById('titleDimensions').textContent = ''
+    document.getElementById('imageDimensions').textContent = ''
+    document.getElementById('titleExtension').textContent = ''
+    document.getElementById('imageExtension').textContent = ''
+    document.getElementById("currentLayerSelector").innerHTML = ''
 
 
     // Clear layers list
-    document.getElementById('layersList').innerHTML = '';
-    document.title = 'PhotoEdits';
+    document.getElementById('layersList').innerHTML = ''
+    document.title = 'PhotoEdits'
 
     // Hide or reset any other UI modules
     closeResizeModule();
     closeHSVModule();
-    document.getElementById('hsvReset').click();
-    closeCropModule();
+    document.getElementById('hsvReset').click()
+    closeCropModule()
 }
 
 async function uploadImage() {
-    const file = document.querySelector("input[type=file]").files[0];
-    if (!file) return;
+    const file = document.querySelector("input[type=file]").files[0]
+    if (!file) return
 
-    resetEditor();
+    resetEditor()
 
-    const reader = new FileReader();
-    const image = new Image();
+    const reader = new FileReader()
+    const image = new Image()
 
     // File Metadata
-    const name = file.name.substring(0, file.name.lastIndexOf('.'));
-    const type = file.type;
-    const extension = type.slice(6);
-    const canvas = document.getElementById('imageCanvas');
+    const name = file.name.substring(0, file.name.lastIndexOf('.'))
+    const type = file.type
+    const extension = type.slice(6)
+    const canvas = document.getElementById('imageCanvas')
 
     // Writes image data (Base64) to image.src
     reader.onload = () => {
-        image.src = reader.result;
+        image.src = reader.result
     };
 
     image.onload = () => {
-        imageEditor = new ImageEditor(image, name, type, extension, canvas);
+        imageEditor = new ImageEditor(image, name, type, extension, canvas)
         window.imageEditor = imageEditor
 
-        const imageEditorInstantiationEvent = new CustomEvent('imageEditorReady', { detail: { instance: imageEditor } });
+        const imageEditorInstantiationEvent = new CustomEvent('imageEditorReady', { detail: { instance: imageEditor } })
         window.dispatchEvent(imageEditorInstantiationEvent)
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file)
 }
 
 function openCropModule() {
