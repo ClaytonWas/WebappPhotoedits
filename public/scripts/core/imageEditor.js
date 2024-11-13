@@ -27,7 +27,11 @@ export class ImageEditor {
 
 
         
-        this.image = this.IMAGE                     // Used to resize images from from the original image dimensions while allowing overwrites. 
+        this.image = this.IMAGE                     // Used to resize images from from the original image dimensions while allowing overwrites.
+        this.type = this.TYPE
+        this.name = this.NAME
+        this.extension = this.EXTENSION
+
         this.canvas = canvas
         this.context = canvas.getContext("2d")
 
@@ -52,9 +56,27 @@ export class ImageEditor {
 
     quickExport() {
         let exportAnchor = document.createElement('a')
-        exportAnchor.href = this.canvas.toDataURL(this.TYPE)
-        exportAnchor.download = `${this.NAME}_PhotoEditsExport.${this.EXTENSION}`
+        exportAnchor.href = this.canvas.toDataURL(this.type)
+        exportAnchor.download = `${this.name}_PhotoEditsExport.${this.extension}`
         exportAnchor.click()
+    }
+
+    setType(type) {
+        this.type = type
+    }
+
+    setName(name) {
+        this.name = name
+    }
+
+    setExtension(extension) {
+        this.extension = extension
+    }
+
+    changeFileType(name, extension) {
+        this.setName(name)
+        this.setExtenstion(extension)
+        this.setType(`image/${extension}`)
     }
 
     renderImage() {

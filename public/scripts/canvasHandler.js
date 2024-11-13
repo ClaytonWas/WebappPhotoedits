@@ -13,13 +13,13 @@ function initializeOriginalImageDataModule(imageEditor) {
 
 export function initializeModifiedImageDataModule(imageEditor) {
     document.getElementById('titleNameModified').textContent = 'Name:'
-    document.getElementById('imageNameModified').textContent = imageEditor.NAME
+    document.getElementById('imageNameModified').textContent = imageEditor.name
 
     document.getElementById('titleDimensionsModified').textContent = 'Dimensions:'
     document.getElementById('imageDimensionsModified').textContent = `${imageEditor.image.width} x ${imageEditor.image.height}px`
 
     document.getElementById('titleExtensionModified').textContent = 'Extension:'
-    document.getElementById('imageExtensionModified').textContent = `.${imageEditor.EXTENSION}`
+    document.getElementById('imageExtensionModified').textContent = `.${imageEditor.extension}`
 }
 
 window.addEventListener('imageEditorReady', (event) => {
@@ -114,5 +114,78 @@ window.addEventListener('imageEditorReady', (event) => {
         currentTranslate.y += (afterTransformY - beforeTransformY) * scale
   
         updateTransform()
+    })
+
+    // Change Image Name
+    let imageName = document.getElementById('imageNameModified')
+    imageName.addEventListener('dblclick', (event) => {
+        // Stop event from bubbling up
+        event.stopPropagation()
+        
+        const currentName = imageName.textContent
+        imageName.textContent = ''
+    
+        const nameInput = document.createElement('input')
+        nameInput.type = 'text'
+        nameInput.name = 'newInput'
+        nameInput.value = imageEditor.name
+        imageName.appendChild(nameInput)
+    
+        nameInput.focus()
+        nameInput.addEventListener('blur', () => {
+            const newName = nameInput.value
+            imageEditor.setName(newName)
+            initializeModifiedImageDataModule(imageEditor)
+        }, { once: true }) // Add once: true to prevent multiple listeners
+    
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nameInput.blur()
+            }
+        })
+    
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                nameInput.value = currentName
+                nameInput.blur()
+            }
+        })
+    })
+    // Change Image Name
+    let imageExtension = document.getElementById('imageExtensionModified')
+    imageExtension.addEventListener('dblclick', (event) => {
+        // Stop event from bubbling up
+        event.stopPropagation()
+        
+        const currentName = imageExtension.textContent
+        imageExtension.textContent = ''
+    
+        const nameInput = document.createElement('input')
+        nameInput.type = 'text'
+        nameInput.name = 'newInput'
+        nameInput.value = imageEditor.extension
+        imageExtension.appendChild(nameInput)
+    
+        nameInput.focus()
+        nameInput.addEventListener('blur', () => {
+            const newName = nameInput.value
+            imageEditor.setExtension(newName)
+            
+            imageEditor.setType()
+            initializeModifiedImageDataModule(imageEditor)
+        }, { once: true }) // Add once: true to prevent multiple listeners
+    
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nameInput.blur()
+            }
+        })
+    
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                nameInput.value = currentName
+                nameInput.blur()
+            }
+        })
     })
 })
