@@ -295,6 +295,14 @@ window.addEventListener('load', () => {
         imageEditor.renderImage()
 
         setTimeout(() => {
+            // Reset UI Windows
+            document.getElementById('cropStartHeight').value = 0
+            document.getElementById('cropStartWidth').value = 0
+            document.getElementById('cropEndHeight').value = imageEditor.image.height
+            document.getElementById('cropEndWidth').value = imageEditor.image.width
+            document.getElementById('resizeHeight').value = imageEditor.image.height
+            document.getElementById('resizeWidth').value = imageEditor.image.width
+            document.getElementById('hsvReset').click();
             initializeModifiedImageDataModule(imageEditor)
         }, 50)
     })
@@ -302,6 +310,14 @@ window.addEventListener('load', () => {
     document.getElementById('resetImage').addEventListener('click', () => {
         imageEditor.resetImage()
         setTimeout(() => {
+            // Reset UI Windows
+            document.getElementById('cropStartHeight').value = 0
+            document.getElementById('cropStartWidth').value = 0
+            document.getElementById('cropEndHeight').value = imageEditor.image.height
+            document.getElementById('cropEndWidth').value = imageEditor.image.width
+            document.getElementById('resizeHeight').value = imageEditor.image.height
+            document.getElementById('resizeWidth').value = imageEditor.image.width
+            document.getElementById('hsvReset').click();
             initializeModifiedImageDataModule(imageEditor);
         }, 50);
         imageEditor.renderImage()
@@ -398,10 +414,10 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             paintedStylization,
             {
-                width: { value: 5, range: [1, 500], valueStep: 1 },
-                length: { value: 5, range: [1, 1000], valueStep: 1 },
+                width: { value: 5, range: [1, 150], valueStep: 1 },
+                length: { value: 5, range: [1, 250], valueStep: 1 },
                 angle: {value: 145, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [5, 1000000], valueStep: 1},
+                sampling: {value: 10, range: [5, 10000], valueStep: 1},
                 edgeThreshold: {value: 100, range: [1, 255], valueStep: 1}
             }
         )
