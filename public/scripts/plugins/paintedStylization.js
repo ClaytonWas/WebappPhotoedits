@@ -3,6 +3,8 @@ export function paintedStylization(image, parameters = {}) {
     const strokeLength = parameters.length ?? 5
     const distanceBetweenSamples = parameters.sampling * 4 ?? 40
     const edgeThreshold = parameters.edgeThreshold ?? 100
+    const overwritePixels = parameters.overwritePixels ?? false
+    const overwriteEdges = parameters.overwriteEdges ?? false
     
     const degrees = parameters.angle ?? 45
     const radians = degrees * (Math.PI / 180)
@@ -28,7 +30,7 @@ export function paintedStylization(image, parameters = {}) {
             r: image.data[i],
             g: image.data[i + 1],
             b: image.data[i + 2]
-        };
+        }
 
         strokeDrawing: {
             for (let currentLengthValueOfLine = 0; currentLengthValueOfLine < strokeLength; currentLengthValueOfLine += 0.5) {
@@ -39,11 +41,11 @@ export function paintedStylization(image, parameters = {}) {
                     const dataIndex = (vectorY * image.width + vectorX) * 4;
 
                     // If 'continue', point is skipped if it is a future sample point to prevent recasting the same colour.
-                    if (samplePoints.has(`${vectorX},${vectorY}`)) continue
+                    if (samplePoints.has(`${vectorX},${vectorY}`) && !overwritePixels) continue
 
                     // Check for edge presence
                     const edgeIndex = vectorY * image.width + vectorX
-                    if (edgeMap[edgeIndex] > edgeThreshold) break strokeDrawing
+                    if (edgeMap[edgeIndex] > edgeThreshold && !overwriteEdges) break strokeDrawing
 
                     // Draw pixel if within bounds
                     if (vectorX >= 0 && vectorX < image.width && vectorY >= 0 && dataIndex < image.data.length - 2) {
@@ -165,6 +167,8 @@ export function vectorsInSpace(image, parameters = {}) {
 export function sobelEdges(image, parameters = {}) {
     const referenceImageData = new Uint8ClampedArray(image.data)
     const edgeThreshold = parameters.edgeThreshold ?? 100
+    const blackoutBackground = parameters.blackoutBackground ?? true
+    const transparentBackground = parameters.transparentBackground ?? false
     
     // Kernels
     const sobelX = [-1, 0, 1,
@@ -175,12 +179,14 @@ export function sobelEdges(image, parameters = {}) {
                      0, 0, 0,
                      1, 2, 1]
 
-    // Set image to black rectangle.
-    for (let i = 0; i < image.data.length; i += 4) {
-        image.data[i] = 0
-        image.data[i + 1] = 0
-        image.data[i + 2] = 0
-        image.data[i + 3] = 255
+    if (blackoutBackground && !transparentBackground) {
+        // Set image to black rectangle.
+        for (let i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 0
+            image.data[i + 1] = 0
+            image.data[i + 2] = 0
+            image.data[i + 3] = 255
+        }   
     }
 
     // Pixel Processing
@@ -220,6 +226,8 @@ export function sobelEdges(image, parameters = {}) {
                 image.data[i] = 255
                 image.data[i + 1] = 255
                 image.data[i + 2] = 255
+            } else if (transparentBackground) {
+                image.data[(y*image.width + x)*4 + 3] = 0
             }
         }
     }
@@ -230,6 +238,8 @@ export function sobelEdges(image, parameters = {}) {
 export function sobelEdgesColouredDirections(image, parameters = {}) {
     const referenceImageData = new Uint8ClampedArray(image.data)
     const edgeThreshold = parameters.edgeThreshold ?? 100
+    const blackoutBackground = parameters.blackoutBackground ?? true
+    const transparentBackground = parameters.transparentBackground ?? false
     
     // Kernels
     const sobelX = [-1, 0, 1,
@@ -240,12 +250,14 @@ export function sobelEdgesColouredDirections(image, parameters = {}) {
                      0, 0, 0,
                      1, 2, 1]
 
-    // Set image to black rectangle.
-    for (let i = 0; i < image.data.length; i += 4) {
-        image.data[i] = 0
-        image.data[i + 1] = 0
-        image.data[i + 2] = 0
-        image.data[i + 3] = 255
+    if (blackoutBackground && !transparentBackground) {
+        // Set image to black rectangle.
+        for (let i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 0
+            image.data[i + 1] = 0
+            image.data[i + 2] = 0
+            image.data[i + 3] = 255
+        }   
     }
 
     // Pixel Processing
@@ -293,6 +305,8 @@ export function sobelEdgesColouredDirections(image, parameters = {}) {
                 image.data[i] = Math.floor(normalizedX * 255)
                 image.data[i + 1] = Math.floor(normalizedY * 255)
                 image.data[i + 2] = Math.floor(normalizedX * normalizedY * 255)
+            } else if (transparentBackground) {
+                image.data[(y*image.width + x)*4 + 3] = 0
             }
         }
     }
@@ -303,6 +317,8 @@ export function sobelEdgesColouredDirections(image, parameters = {}) {
 export function prewireEdges(image, parameters = {}) {
     const referenceImageData = new Uint8ClampedArray(image.data)
     const edgeThreshold = parameters.edgeThreshold ?? 100
+    const blackoutBackground = parameters.blackoutBackground ?? true
+    const transparentBackground = parameters.transparentBackground ?? false
     
     // Kernels
     const prewireX = [-1, 0, 1,
@@ -313,13 +329,16 @@ export function prewireEdges(image, parameters = {}) {
                      0, 0, 0,
                      -1, -1, -1]
 
-    // Set image to black rectangle.
-    for (let i = 0; i < image.data.length; i += 4) {
-        image.data[i] = 0
-        image.data[i + 1] = 0
-        image.data[i + 2] = 0
-        image.data[i + 3] = 255
+    if (blackoutBackground && !transparentBackground) {
+        // Set image to black rectangle.
+        for (let i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 0
+            image.data[i + 1] = 0
+            image.data[i + 2] = 0
+            image.data[i + 3] = 255
+        }   
     }
+
 
     // Pixel Processing
     for (let y = 0; y < image.height; y++) {
@@ -357,6 +376,8 @@ export function prewireEdges(image, parameters = {}) {
                 image.data[i] = 255
                 image.data[i + 1] = 255
                 image.data[i + 2] = 255
+            } else if (transparentBackground) {
+                image.data[(y*image.width + x)*4 + 3] = 0
             }
         }
     }
@@ -367,23 +388,26 @@ export function prewireEdges(image, parameters = {}) {
 export function prewireEdgesColouredDirections(image, parameters = {}) {
     const referenceImageData = new Uint8ClampedArray(image.data)
     const edgeThreshold = parameters.edgeThreshold ?? 100
+    const blackoutBackground = parameters.blackoutBackground ?? true
+    const transparentBackground = parameters.transparentBackground ?? false
     
     // Kernels
     const prewireX = [-1, 0, 1,
-        -1, 0, 1,
-        -1, 0, 1]
+                    -1, 0, 1,
+                    -1, 0, 1]
 
     const prewireY = [1, 1, 1, 
-         0, 0, 0,
-         -1, -1, -1]
+                    0, 0, 0,
+                    -1, -1, -1]
 
-
-    // Set image to black rectangle.
-    for (let i = 0; i < image.data.length; i += 4) {
-        image.data[i] = 0
-        image.data[i + 1] = 0
-        image.data[i + 2] = 0
-        image.data[i + 3] = 255
+    if (blackoutBackground && !transparentBackground) {
+        // Set image to black rectangle.
+        for (let i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 0
+            image.data[i + 1] = 0
+            image.data[i + 2] = 0
+            image.data[i + 3] = 255
+        }   
     }
 
     // Pixel Processing
@@ -416,7 +440,6 @@ export function prewireEdgesColouredDirections(image, parameters = {}) {
             // magnitude = √[(∂f/∂x)² + (∂f/∂y)²]
             const magnitude = Math.sqrt(Math.pow(gradientX, 2) + Math.pow(gradientY, 2))
             
-            // Draw white if the magnitude of intesntiy change in both directions is above the selected threshold.
             if (magnitude > edgeThreshold) {
                 let i = (y * image.width + x) * 4
 
@@ -431,6 +454,8 @@ export function prewireEdgesColouredDirections(image, parameters = {}) {
                 image.data[i] = Math.floor(normalizedX * 255)
                 image.data[i + 1] = Math.floor(normalizedY * 255)
                 image.data[i + 2] = Math.floor(normalizedX * normalizedY * 255)
+            } else if (transparentBackground) {
+                image.data[(y*image.width + x)*4 + 3] = 0
             }
         }
     }

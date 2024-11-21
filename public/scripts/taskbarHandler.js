@@ -416,9 +416,11 @@ window.addEventListener('load', () => {
             {
                 width: { value: 5, range: [1, 150], valueStep: 1 },
                 length: { value: 5, range: [1, 250], valueStep: 1 },
-                angle: {value: 145, range: [0, 360], valueStep: 1 },
-                sampling: {value: 10, range: [5, 10000], valueStep: 1},
-                edgeThreshold: {value: 100, range: [1, 255], valueStep: 1}
+                angle: { value: 145, range: [0, 360], valueStep: 1 },
+                sampling: { value: 10, range: [5, 10000], valueStep: 1 },
+                edgeThreshold: { value: 100, range: [1, 255], valueStep: 1 },
+                overwritePixels: { value: false },
+                overwriteEdges: { value: false }
             }
         )
         renderLayerProperties(imageEditor)
@@ -463,7 +465,9 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             sobelEdges,
             {
-                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1},
+                blackoutBackground: { value: true },
+                transparentBackground: { value: false }
             }
         )
         renderLayerProperties(imageEditor)
@@ -475,7 +479,9 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             sobelEdgesColouredDirections,
             {
-                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1},
+                blackoutBackground: { value: true },
+                transparentBackground: { value: false }
             }
         )
         renderLayerProperties(imageEditor)
@@ -487,7 +493,9 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             prewireEdges,
             {
-                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1},
+                blackoutBackground: { value: true },
+                transparentBackground: { value: false }
             }
         )
         renderLayerProperties(imageEditor)
@@ -499,7 +507,9 @@ window.addEventListener('load', () => {
             imageEditor.getSelectedIndex(),
             prewireEdgesColouredDirections,
             {
-                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1}
+                edgeThreshold: {value: 50, range: [0, 255], valueStep: 1},
+                blackoutBackground: { value: true },
+                transparentBackground: { value: false }
             }
         )
         renderLayerProperties(imageEditor)
