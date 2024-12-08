@@ -1,8 +1,8 @@
 # WebappPhotoedits
 Photo manipulation software using JavaScript inspired by applications like Photoshop and Photopea.
-Provding filter and image transformations.
-[Version 0.1 Showcase](https://youtu.be/N5Vu2j7mWeA)
-
+Provding filter and image transformations. <br >
+[Version 0.1 Showcase](https://youtu.be/N5Vu2j7mWeA) <br >
+[Version 0.2 Showcase](https://youtu.be/yxHyBOE9t0Q) This is not meant to be a comprehensive overview.
 # Current Stage
 A webapp that serves a photo manipulation user interface to a front-end user using Node.js and Express.js. 
 
@@ -32,19 +32,6 @@ Taskbar interaction that manipulates the image mapped to the canvas.
 
 ### TODO:
 1. Finish interpolation types for resize module.
-2. Fix ugly UI on resize module.
-
-
-3. Get the plugins system to load into the handler on instantiation.
-4. FILTERS
-exposure - altering light that hits the image
-contrast - difference of instensities between extreme
-colour balance - white balancing, colour correction
-colour grade - changing the brightness(luminance)/hue/saturation, for individual colours and/or entire image
-5. MASKS
-slectivley hide or show parts of a layer
-spot healing - remove unwanted parts of image, the brush automatically selects pixel neighbours to replace unwanted ones
-6. TRANSFORMS (NON LAYER MANIPULATIONS)
-cropping 
-rotation
+2. Get the plugins system to load into the handler on instantiation.
+3. MASKS
 
