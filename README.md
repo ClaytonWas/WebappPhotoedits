@@ -11,7 +11,7 @@ This code is built on a programatic ImageEditor class instance, that handles fro
 Currently in development.
 
 ### Installation
-1. Install packages (with Node v20.15.1):
+1. Install packages (built using Node v20.15.1):
    ```bash
    npm ci
    ```
@@ -21,6 +21,9 @@ Currently in development.
    ```
 
 ### Images
+Overview.
+![Overview](./public/images/Example4.jpg)
+
 Image imports working with front end users local storage.
 ![File Imports](./public/images/fileImportsOnUI.png)
 
@@ -29,6 +32,14 @@ Front end visualization of image.
 
 Taskbar interaction that manipulates the image mapped to the canvas.
 ![Greyscaling](./public/images/RosesGreyscaleOnTaskbar.jpg)
+
+#### Resulting Examples
+![Gif2](./public/images/gif2.gif)
+
+![Gif1](./public/images/vectors.gif)
+
+![TheMajesticIbis](./public/images/IbisPaintedEdges.jpeg)
+
 
 ### TODO:
 1. Finish interpolation types for resize module.
