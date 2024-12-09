@@ -1,7 +1,6 @@
 # WebappPhotoedits
 Photo manipulation software using JavaScript inspired by applications like Photoshop and Photopea.
 Provding filter and image transformations. <br >
-[Version 0.1 Showcase](https://youtu.be/N5Vu2j7mWeA) <br >
 [Version 0.2 Showcase](https://youtu.be/yxHyBOE9t0Q) This is not meant to be a comprehensive overview. <br >
 # Current Stage
 A webapp that serves a photo manipulation user interface to a front-end user using Node.js and Express.js. 
