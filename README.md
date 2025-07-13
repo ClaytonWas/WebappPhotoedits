@@ -1,6 +1,7 @@
 # WebappPhotoedits
-# Website
-[photoedit](https://photoedit.ca)
+[website](https://photoedit.ca)
+
+
 Photo manipulation software using JavaScript inspired by applications like Photoshop and Photopea.
 Provding filter and image transformations. <br >
 
